@@ -1,7 +1,7 @@
 # Spr2023SeniorSemGroup4
 
-*instructions
 Group Members and Group Number:  Jacob Schnitker, Walker Hayes, Colton Glidewell, Lucas Keasby, Group 8
+
 Project Title: Computationally Categorizing Clothing
 
 
