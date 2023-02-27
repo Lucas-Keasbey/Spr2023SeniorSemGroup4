@@ -38,6 +38,7 @@ def main():
         #gets random images
         npimg = img.numpy()
         plt.imshow(np.transpose(npimg, (1, 2, 0)))
+        ##plt.show(npimg)
     
     ## get some random training images
     #iterates through the dataset
@@ -60,6 +61,7 @@ def main():
         print(out.shape)
         break
     
+
     learning_rate = 0.001
     num_epochs = 1
     
