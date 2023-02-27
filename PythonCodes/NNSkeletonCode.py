@@ -21,7 +21,7 @@ def main():
     ## download and load training dataset
     # This is the dataset that will be using 'root = where the dataset is', 
     #train if the data is pretrained, download if it is downloaded
-    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=True, transform=transform)
+    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform)
     
     #DataLoader(What is the dataset, what is the batch size, 
     #if you would like to shuffle the data(optional), num of cpu cores(optional))
@@ -61,7 +61,7 @@ def main():
         break
     
     learning_rate = 0.001
-    num_epochs = 3
+    num_epochs = 1
     
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = MyModel()
@@ -101,7 +101,7 @@ def main():
               %(epoch, train_running_loss / i, train_acc/i)) 
     
     
-    PATH = "C:\\Users\starm\OneDrive\Desktop\models\model.pth"
+    PATH = "../Models/Test/model.pth"
     torch.save(model, PATH)
     
     
