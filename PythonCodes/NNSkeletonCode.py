@@ -21,7 +21,7 @@ def main():
     ## download and load training dataset
     # This is the dataset that will be using 'root = where the dataset is', 
     #train if the data is pretrained, download if it is downloaded
-    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform)
+    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
     
     #DataLoader(What is the dataset, what is the batch size, 
     #if you would like to shuffle the data(optional), num of cpu cores(optional))
