@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Models",
+    "\\Models\\Test",
     "\\PythonCodes"
   ],
-  "SelectedNode": "\\PythonCodes\\BasicModel.py",
+  "SelectedNode": "\\PythonCodes\\ModelTraining.py",
   "PreviewInSolutionExplorer": false
 }
