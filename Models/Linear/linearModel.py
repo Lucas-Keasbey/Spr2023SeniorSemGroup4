@@ -8,11 +8,7 @@ Created on Sun Mar 19 16:46:39 2023
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchvision
-import torchvision.transforms as transforms
-import math
-import matplotlib.pyplot as plt
-import numpy as np
+
 
 learningRate = 0.01
 targetVal = 5
@@ -21,7 +17,7 @@ class Net(nn.Module):
     
     def __init__(self):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(4, 5)
+        self.fc1 = nn.Linear(3, 5)
         self.fc2 = nn.Linear(5, 5)
         self.fc3 = nn.Linear(5, 5)
         self.fc4 = nn.Linear(5, 5)
