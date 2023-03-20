@@ -35,9 +35,7 @@ net = Net()
 target = targetVal
 criterion = nn.BCELoss()
 
-
 optimizer = torch.optim.SGD(net.parameters(), lr=learningRate)
-
 
 optimizer.zero_grad()
 output = net(input)
