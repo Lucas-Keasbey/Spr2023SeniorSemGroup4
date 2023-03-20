@@ -8,6 +8,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import BasicModel
+##import DataSaver
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -40,7 +41,9 @@ def main():
        print("Image label dimensions:", labels.shape)
        break
     
-    
+    saver = DataSaver.dataSaver(num_epochs, learning_rate, BATCH_SIZE)
+    saver.initialize()
+   
     for epoch in range(num_epochs):
         train_running_loss = 0.0
         train_acc = 0.0
@@ -64,10 +67,12 @@ def main():
         model.eval()
         print('Epoch: %d | Loss: %.4f | Train Accuracy: %.2f' \
               %(epoch, train_running_loss / i, train_acc/i)) 
-    
+        ##saver.saveRunData(epoch, (train_running_loss / i), (train_acc/i)) made with old class
     
     PATH = "./Models/Test/BasicModel.pth"
     torch.save(model, PATH)
+
+
 
 
 def imshow(img):
@@ -83,6 +88,9 @@ def get_accuracy(logit, target, batch_size):
     corrects = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
     accuracy = 100.0 * corrects/batch_size
     return accuracy.item()
+
+
+
 
 
 

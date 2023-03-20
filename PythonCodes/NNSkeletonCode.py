@@ -99,6 +99,7 @@ def main():
             train_acc += get_accuracy(logits, labels, BATCH_SIZE)
         
         model.eval()
+
         print('Epoch: %d | Loss: %.4f | Train Accuracy: %.2f' \
               %(epoch, train_running_loss / i, train_acc/i)) 
     

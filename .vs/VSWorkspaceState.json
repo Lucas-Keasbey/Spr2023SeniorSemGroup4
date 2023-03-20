@@ -3,8 +3,9 @@
     "",
     "\\Models",
     "\\Models\\Test",
-    "\\PythonCodes"
+    "\\PythonCodes",
+    "\\TrainingData"
   ],
-  "SelectedNode": "\\PythonCodes\\ModelTraining.py",
+  "SelectedNode": "\\PythonCodes\\BasicModelTraining.py",
   "PreviewInSolutionExplorer": false
 }
