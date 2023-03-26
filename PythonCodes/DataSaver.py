@@ -33,11 +33,16 @@ class dataSaver:
         writeFile.write(strinit)
         writeFile.close()
     
+    #saves the validation data from model
     def saveRunData(self, epoch, loss, acc):
         writeFile = open(self.writeFileName,'a')
         writeFile.write("Epoch:%d\tLoss:%f\tAccuaracy:%.2f\n"% (epoch, loss, acc))
         writeFile.close()
 
+    def saveTestAcc(self,acc):
+        writeFile = open(self.writeFileName,'a')
+        writeFile.write("Testing Accuracy:%d\n"% (acc))
+        writeFile.close()
 
 
 

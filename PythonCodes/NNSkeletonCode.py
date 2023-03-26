@@ -104,8 +104,10 @@ def main():
               %(epoch, train_running_loss / i, train_acc/i)) 
     
     
-    PATH = "../Models/Test/model.pth"
-    torch.save(model, PATH)
+    PATH = "./Models/Test/model.pth"
+    torch.save(model.state_dict(), PATH)
+
+    model.load_state_dict(torch.load(PATH)) 
     
     
 ## compute accuracy
