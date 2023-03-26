@@ -1,11 +1,11 @@
 class dataSaver:
-    ##to be deleted/merged
-    numEpochs = 0
-    learnRate = 0.0
-    batchSize = 0
-    trialFile = None
-    trialNum = 0
-    writeFile = None
+    #numEpochs = 0
+    #learnRate = 0.0
+    #batchSize = 0
+    #trialFile = None
+    #trialNum = 0
+    #writeFile = None
+    #writeFileName = ""
 
     def __init__(self, numEpochs, learnRate, batchSize):
         self.numEpochs = numEpochs
@@ -14,26 +14,28 @@ class dataSaver:
 
     def initialize(self):
         ##get trialnum
-        trialFile = open('./TrainingData/trials.txt', 'r')
-        trialNumString = trialFile.read(100)
+        trialFile = open('./TrainingData/trialNum.txt', 'r')
+        trialNumString = trialFile.read(3)
         trialNum = int(trialNumString)
         trialFile.close()
 
         ##update for trial num for next trial
-        fileName = "Trial"
-        trialFile = open('./TrainingData/trials.txt', 'w')
-        trialFile.write(trialNum)
+        newtrailNum = (trialNum + 1)
+        trialFile = open('./TrainingData/trialNum.txt', 'w')
+        strNewTrialNum = ("%d"%(newtrailNum))
+        trialFile.write(strNewTrialNum) 
         trialFile.close()
 
         ##First line of trial
-        writeFileName = ("%d",trialNum)
-        writeFile = open(writeFileName,'w')
-        writeFile.write("Trial: %d Epochs: %d LearningRate: %f BatchSize: %d", trialNum, numEpochs, learnRate, batchSize)
+        self.writeFileName = ('./TrainingData/Trial%d.txt'%(trialNum))
+        writeFile = open(self.writeFileName,'w')
+        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.2f\tBatchSize:%d\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize)
+        writeFile.write(strinit)
         writeFile.close()
     
-    def saveRunData(epoch, loss, acc):
-        writeFile = open(writeFileName,'a')
-        writeFile.write("Epoch: %d Loss: %f Accuaracy: %f", epoch, loss, acc)
+    def saveRunData(self, epoch, loss, acc):
+        writeFile = open(self.writeFileName,'a')
+        writeFile.write("Epoch:%d\tLoss:%f\tAccuaracy:%.2f\n"% (epoch, loss, acc))
         writeFile.close()
 
 

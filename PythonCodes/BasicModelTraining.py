@@ -8,7 +8,8 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import BasicModel
-##import DataSaver
+import time
+import DataSaver
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -19,8 +20,8 @@ def main():
 
     #for testing
     BATCH_SIZE = 64
-    learning_rate = 0.01
-    num_epochs = 2
+    learning_rate = 1
+    num_epochs = 1
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))])
     trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
@@ -44,6 +45,7 @@ def main():
     saver = DataSaver.dataSaver(num_epochs, learning_rate, BATCH_SIZE)
     saver.initialize()
    
+    startTime = time.time()
     for epoch in range(num_epochs):
         train_running_loss = 0.0
         train_acc = 0.0
@@ -67,8 +69,11 @@ def main():
         model.eval()
         print('Epoch: %d | Loss: %.4f | Train Accuracy: %.2f' \
               %(epoch, train_running_loss / i, train_acc/i)) 
-        ##saver.saveRunData(epoch, (train_running_loss / i), (train_acc/i)) made with old class
+        saver.saveRunData(epoch, (train_running_loss / i), (train_acc/i))
     
+    finishTime = time.time();
+    print('Time elaspsed (seconds): %.2f' \
+        %(finishTime - startTime))
     PATH = "./Models/Test/BasicModel.pth"
     torch.save(model, PATH)
 
