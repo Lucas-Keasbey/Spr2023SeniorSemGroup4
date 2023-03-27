@@ -29,19 +29,19 @@ class dataSaver:
         ##First line of trial
         self.writeFileName = ('./TrainingData/Trial%d.txt'%(trialNum))
         writeFile = open(self.writeFileName,'w')
-        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.2f\tBatchSize:%d\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize)
+        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.3f\tBatchSize:%d\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize)
         writeFile.write(strinit)
         writeFile.close()
     
     #saves the validation data from model
     def saveRunData(self, epoch, trainloss, validloss, acc):
         writeFile = open(self.writeFileName,'a')
-        writeFile.write("Epoch:%d\tTrainingLoss:%.2f\tValidLoss:%.2f\tAccuaracy:%.2f\n"% (epoch, trainloss, validloss, acc))
+        writeFile.write("Epoch:%d\tTrainingLoss:%.3f\tValidLoss:%.3f\tAccuracy:%.3f\n"% (epoch, trainloss, validloss, acc))
         writeFile.close()
 
     def saveTestAcc(self,acc):
         writeFile = open(self.writeFileName,'a')
-        writeFile.write("Testing Accuracy:%d%\n"% (acc))
+        writeFile.write("TestingAccuracy:%.2f\n"% (acc))
         writeFile.close()
 
 

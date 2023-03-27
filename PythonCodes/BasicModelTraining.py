@@ -21,10 +21,10 @@ def main():
 
     #for testing
     BATCH_SIZE = 64
-    learning_rate = 0.01
-    num_epochs = 50
+    learning_rate = 0.05
+    num_epochs = 25
 
-    print("Running Model with %d epochs, %d batch size, and %.2f learning rate\n"%(num_epochs,BATCH_SIZE,learning_rate))
+    print("Running Model with %d epochs, %d batch size, and %.4f learning rate\n"%(num_epochs,BATCH_SIZE,learning_rate))
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))])
     trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
@@ -62,7 +62,7 @@ def main():
     saver = DataSaver.dataSaver(num_epochs, learning_rate, BATCH_SIZE)
     saver.initialize()
    
-    print("Begining Training and Validation...\n")
+    print("\nBegining Training and Validation...\n")
     startTime = time.time()
     
     best_accuracy = 0.0 
