@@ -1,16 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Application\\app",
-    "\\Application\\app\\src",
-    "\\Application\\app\\src\\main",
-    "\\Application\\app\\src\\test",
-    "\\Application\\app\\src\\test\\java",
-    "\\Application\\app\\src\\test\\java\\com",
-    "\\Application\\app\\src\\test\\java\\com\\example",
-    "\\Application\\app\\src\\test\\java\\com\\example\\myapplication",
-    "\\PythonCodes"
+    "\\Models",
+    "\\Models\\Test",
+    "\\PythonCodes",
+    "\\TrainingData"
   ],
-  "SelectedNode": "\\PythonCodes\\NNSkeletonCode.py",
+  "SelectedNode": "\\Models\\Test\\BasicModelTest.pth",
   "PreviewInSolutionExplorer": false
 }
