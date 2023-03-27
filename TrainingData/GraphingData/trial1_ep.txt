@@ -1,0 +1,16 @@
+Trial:1	lr:0.01	Epochs:15
+Epoch:0	Loss:0.9003	Accuracy:66.06
+Epoch:1	Loss:0.4456	Accuracy:83.85
+Epoch:2	Loss:0.3711	Accuracy:86.41
+Epoch:3	Loss:0.3363	Accuracy:87.56
+Epoch:4	Loss:0.3108	Accuracy:88.64
+Epoch:5	Loss:0.2967	Accuracy:89.18
+Epoch:6	Loss:0.2794	Accuracy:89.70
+Epoch:7	Loss:0.2679	Accuracy:90.14
+Epoch:8	Loss:0.2603	Accuracy:90.34
+Epoch:9	Loss:0.2519	Accuracy:90.66
+Epoch:10	Loss:0.2436	Accuracy:90.95
+Epoch:11	Loss:0.2361	Accuracy:91.12
+Epoch:12	Loss:0.2283	Accuracy:91.44
+Epoch:13	Loss:0.2203	Accuracy:91.69
+Epoch:14	Loss:0.2151	Accuracy:91.86
