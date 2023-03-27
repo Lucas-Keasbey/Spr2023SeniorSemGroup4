@@ -22,7 +22,9 @@ def main():
     #for testing
     BATCH_SIZE = 64
     learning_rate = 0.01
-    num_epochs = 1
+    num_epochs = 50
+
+    print("Running Model with %d epochs, %d batch size, and %.2f learning rate\n"%(num_epochs,BATCH_SIZE,learning_rate))
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))])
     trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
@@ -117,7 +119,7 @@ def main():
             best_accuracy = accuracy
         
         print('Epoch:%d | TrainingLoss:%.4f  | Validation Loss:%.4f | Accuracy:%.2f'%(epoch, train_loss / len(trainloader), valid_loss / len(validloader), best_accuracy)) 
-        saver.saveRunData(epoch, (valid_loss / len(validloader)), (valid_running_acc/ len(validloader)))
+        saver.saveRunData(epoch,(train_loss  / len(trainloader)), (valid_loss / len(validloader)), (accuracy))
 
        
 

@@ -2,10 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Models",
-    "\\Models\\Test",
     "\\PythonCodes",
     "\\TrainingData"
   ],
-  "SelectedNode": "\\Models\\Test\\BasicModelTest.pth",
+  "SelectedNode": "\\PythonCodes\\BasicModelTraining.py",
   "PreviewInSolutionExplorer": false
 }

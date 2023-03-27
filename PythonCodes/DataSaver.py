@@ -34,9 +34,9 @@ class dataSaver:
         writeFile.close()
     
     #saves the validation data from model
-    def saveRunData(self, epoch, loss, acc):
+    def saveRunData(self, epoch, trainloss, validloss, acc):
         writeFile = open(self.writeFileName,'a')
-        writeFile.write("Epoch:%d\tLoss:%.2f%\tAccuaracy:%.2f\n"% (epoch, loss, acc))
+        writeFile.write("Epoch:%d\tTrainingLoss:%.2f\tValidLoss:%.2f\tAccuaracy:%.2f\n"% (epoch, trainloss, validloss, acc))
         writeFile.close()
 
     def saveTestAcc(self,acc):
