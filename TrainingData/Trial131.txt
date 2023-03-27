@@ -1,0 +1,4 @@
+Trial:131	Epochs:3	LearningRate:0.01	BatchSize:64
+Epoch:0	Loss:0.571466	Accuaracy:0.77
+Epoch:1	Loss:0.495210	Accuaracy:0.81
+Epoch:2	Loss:0.415622	Accuaracy:0.85

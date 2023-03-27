@@ -1,0 +1,1 @@
+Trial:124	Epochs:3	LearningRate:0.01	BatchSize:64
