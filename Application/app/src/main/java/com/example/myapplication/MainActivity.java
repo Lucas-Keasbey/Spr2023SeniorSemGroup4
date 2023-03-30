@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
@@ -27,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView pic;
     Button select;
     TextView text;
+    RadioButton basicButton;
+    RadioButton linearButton;
+    RadioButton cnnButton;
+    RadioGroup modelGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         pic = findViewById(R.id.IVPic);
         select = findViewById(R.id.btnLoadImg);
         text = findViewById(R.id.tvGuess);
+        basicButton = findViewById(R.id.BasicRadio);
+        linearButton = findViewById(R.id.LinearRadio);
+        cnnButton = findViewById(R.id.CNNRadio);
+        modelGroup = findViewById(R.id.ModelGroup);
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -25,22 +25,23 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/tvGuess"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
         android:id="@+id/tvGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="<Category>"
+        android:text="Category"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.635" />
+        app:layout_constraintVertical_bias="0.596" />
 
     <Button
         android:id="@+id/btnClassify"
@@ -50,10 +51,10 @@
         android:text="Classify"
         app:layout_constraintBottom_toTopOf="@+id/btnLoadImg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGuess"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -104,10 +105,10 @@
             android:text="Basic Model" />
 
         <RadioButton
-            android:id="@+id/CSSRadio"
+            android:id="@+id/CNNRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CSS Model" />
+            android:text="CNN Model" />
 
         <RadioButton
             android:id="@+id/LinearRadio"
@@ -115,15 +116,5 @@
             android:layout_height="wrap_content"
             android:text="Linear Model" />
     </RadioGroup>
-
-    <Button
-        android:id="@+id/ModelButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="LOAD MODEL"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ModelGroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
