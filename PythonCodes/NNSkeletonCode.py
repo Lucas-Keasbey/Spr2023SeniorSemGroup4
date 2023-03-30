@@ -21,7 +21,7 @@ def main():
     ## download and load training dataset
     # This is the dataset that will be using 'root = where the dataset is', 
     #train if the data is pretrained, download if it is downloaded
-    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform)
+    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
     
     #DataLoader(What is the dataset, what is the batch size, 
     #if you would like to shuffle the data(optional), num of cpu cores(optional))
@@ -63,7 +63,7 @@ def main():
     
 
     learning_rate = 0.001
-    num_epochs = 1
+    num_epochs = 3
     
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = MyModel()
@@ -99,12 +99,15 @@ def main():
             train_acc += get_accuracy(logits, labels, BATCH_SIZE)
         
         model.eval()
+
         print('Epoch: %d | Loss: %.4f | Train Accuracy: %.2f' \
               %(epoch, train_running_loss / i, train_acc/i)) 
     
     
-    PATH = "../Models/Test/model.pth"
-    torch.save(model, PATH)
+    PATH = "./Models/Test/model.pth"
+    torch.save(model.state_dict(), PATH)
+
+    model.load_state_dict(torch.load(PATH)) 
     
     
 ## compute accuracy
