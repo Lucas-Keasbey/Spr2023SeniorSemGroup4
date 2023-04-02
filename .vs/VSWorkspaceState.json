@@ -2,7 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Models",
+    "\\Models\\ModelsForTesting",
+    "\\Models\\TrainedModels",
     "\\PythonCodes",
+    "\\PythonCodes\\Accessory Codes",
     "\\TrainingData"
   ],
   "SelectedNode": "\\PythonCodes\\BasicModelTraining.py",

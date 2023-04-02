@@ -7,10 +7,11 @@ class dataSaver:
     #writeFile = None
     #writeFileName = ""
 
-    def __init__(self, numEpochs, learnRate, batchSize):
+    def __init__(self, numEpochs, learnRate, batchSize, modelType):
         self.numEpochs = numEpochs
         self.learnRate = learnRate
         self.batchSize = batchSize
+        self.modelType = modelType
 
     def initialize(self):
         ##get trialnum
@@ -29,7 +30,7 @@ class dataSaver:
         ##First line of trial
         self.writeFileName = ('./TrainingData/Trial%d.txt'%(trialNum))
         writeFile = open(self.writeFileName,'w')
-        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.3f\tBatchSize:%d\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize)
+        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.3f\tBatchSize:%d\tModel:%s"%(trialNum, self.numEpochs, self.learnRate, self.batchSize, self.modelType)
         writeFile.write(strinit)
         writeFile.close()
     
