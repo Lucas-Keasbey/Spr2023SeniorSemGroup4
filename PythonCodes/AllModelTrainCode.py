@@ -14,8 +14,8 @@ import torchvision.transforms as transforms
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import BasicModel
-from Models.Linear import linearModel
+from Models.ModelClassFiles import BasicModel
+from Models.ModelClassFiles import LinearModel
 import time
 import DataSaver
 
