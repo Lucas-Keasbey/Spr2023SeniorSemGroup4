@@ -2,12 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Models",
+    "\\Models\\Linear",
     "\\Models\\ModelsForTesting",
     "\\Models\\TrainedModels",
-    "\\PythonCodes",
-    "\\PythonCodes\\Accessory Codes",
-    "\\TrainingData"
+    "\\PythonCodes"
   ],
-  "SelectedNode": "\\PythonCodes\\BasicModelTraining.py",
+  "SelectedNode": "\\PythonCodes\\DataSaver.py",
   "PreviewInSolutionExplorer": false
 }

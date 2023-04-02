@@ -19,7 +19,7 @@ def main():
 #   !!!Parameters for various functions have been changed and it will not run correctly!!!
 #   !!!Please use AllModelTrainCode.py!!!!
     
-    while(true):
+    while(True):
         awns = input("This is old training code, please run AllModelTrainCode.py. If you want to run anyway, type Y")
         if(awns == "Y"):
             break

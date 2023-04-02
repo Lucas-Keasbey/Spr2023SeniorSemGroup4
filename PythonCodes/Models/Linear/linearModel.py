@@ -9,10 +9,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-learningRate = 0.01
-targetVal = 5
-
 class Net(nn.Module):
     
     def __init__(self):
@@ -31,16 +27,3 @@ class Net(nn.Module):
         x = F.sigmoid(self.fc5(x))
         return x
 
-net = Net()
-target = targetVal
-criterion = nn.BCELoss()
-
-optimizer = torch.optim.SGD(net.parameters(), lr=learningRate)
-
-optimizer.zero_grad()
-output = net(input)
-loss = criterion(output, target)
-loss.backward()
-optimizer.step()
-
-output = net(input)
