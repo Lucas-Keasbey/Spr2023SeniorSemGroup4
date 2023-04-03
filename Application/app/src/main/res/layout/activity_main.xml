@@ -23,13 +23,15 @@
         android:id="@+id/IVPic"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription='"Uploaded image"'
         app:layout_constraintBottom_toTopOf="@+id/tvGuess"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/tvGuess"

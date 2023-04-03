@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView pic;
     Button select;
+    Button classify;
     TextView text;
     RadioButton basicButton;
     RadioButton linearButton;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         //getting the elements and assigning them to variables
         pic = findViewById(R.id.IVPic);
         select = findViewById(R.id.btnLoadImg);
+        classify = findViewById(R.id.btnClassify);
         text = findViewById(R.id.tvGuess);
         basicButton = findViewById(R.id.BasicRadio);
         linearButton = findViewById(R.id.LinearRadio);
@@ -60,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+        classify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //sets the click event for classify image button
+                text.setText("Not implemented"); //will later call upon the model to get the class
+            }
+
+        });
     }
 
     //this method handles grabbing the image and converting it into a bitmap, also displays the string
@@ -71,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 pic.setImageBitmap(bitmap); //sets the image view to be the bitmap created from the user's image
-                text.setText("Not implemented"); //will later call upon the model to get the class
+
 
             } catch (FileNotFoundException e) {
                 System.out.println("Here!\n"); //debugging
