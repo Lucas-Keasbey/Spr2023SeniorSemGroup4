@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType("image/*");
 
                 startActivityForResult(Intent.createChooser(intent,"Pick an image"), 1);
+                classify.setEnabled(true);
 
             }
 
