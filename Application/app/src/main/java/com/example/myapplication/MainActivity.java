@@ -26,6 +26,17 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    String[] labels = {"T-shirt/top",
+	                    "Trouser",
+                    	"Pullover",
+                    	"Dress",
+                    	"Coat",
+                    	"Sandal",
+                    	"Shirt",
+                    	"Sneaker",
+                    	"Bag",
+                    	"Ankle boot",
+                        "Not implemented"};
     ImageView pic;
     Button select;
     Button classify;
@@ -68,13 +79,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //sets the click event for classify image button
-                text.setText("Not implemented"); //will later call upon the model to get the class
+                text.setText(labels[predictLabel()]);
             }
 
         });
     }
 
-    //this method handles grabbing the image and converting it into a bitmap, also displays the string
+    //this method handles grabbing the image and converting it into a bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -91,6 +102,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    protected int predictLabel(){
+        try{
+            // run image through model and process prediction to get label index
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return 10;
     }
 
 
