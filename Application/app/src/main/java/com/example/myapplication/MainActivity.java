@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType("image/*");
 
                 startActivityForResult(Intent.createChooser(intent,"Pick an image"), 1);
-                classify.setEnabled(true);
+
 
             }
 
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 pic.setImageBitmap(bitmap); //sets the image view to be the bitmap created from the user's image
+                classify.setEnabled(true);
 
 
             } catch (FileNotFoundException e) {
