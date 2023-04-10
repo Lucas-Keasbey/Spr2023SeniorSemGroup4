@@ -59,7 +59,7 @@ class DataPlotter:
     def plotLoss(self):
         for trial in self.data:
             name = "Trial:%d Learning Rate:%.3f"%(trial.trial, trial.lr)
-            plt.plot(trial.loss, label = name)
+            plt.plot(trial.trainingLoss, label = name)
         plt.legend()
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
