@@ -20,10 +20,11 @@ class Net(nn.Module):
         self.fc5 = nn.Linear(50, 10)
     
     def forward(self, x):
+        x = torch.flatten(x,1)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = F.relu(self.fc4(x))
-        x = F.sigmoid(self.fc5(x))
+        x = torch.sigmoid(self.fc5(x))
         return x
 

@@ -24,9 +24,9 @@ def main():
     ##started at 12pm
 
     #Edit these for training for now
-    BATCH_SIZE = 64
-    learningRate = 0.1
-    numEpochs = 2
+    BATCH_SIZE = 28
+    learningRate = 0.0075
+    numEpochs = 30
 
     ##picking model
     modelType, model, transform = selectModelType()
@@ -61,13 +61,20 @@ def main():
     
     print("\nBegining Training and Validation...\n")
     startTime = time.time()
-    trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device)
+    trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType)
     finishTime = time.time();
     print('\nTime elaspsed (seconds): %.2f'%(finishTime - startTime))
-    print("To test model, run the tesing code and with the respective model trained. You need to do this in order to save it")
+    ##print("To test model, run the tesing code and with the respective model trained. You need to do this in order to save it")
+
+    strAwns = input("Would you like to save the trained model (Y/N)?\n")
+    PATH = ("./PythonCodes/Models/TrainedModels/%sModel.pth"%(modelType))
+    if(strAwns == "Y"):
+        torch.save(model, PATH)
+
+
     
 
-def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device):
+def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType):
     bestAcc = 0.0 
     bestValidLoss = 999.99
     for epoch in range(numEpochs):
@@ -106,7 +113,6 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
             _, predicted = torch.max(guess, 1) #grabs the largest probability outputted by the model
             validRunAcc += (predicted == labels).sum().item() #add together the ones it got right
             total += labels.size(0)
-            
 
         accuracy = (100 * validRunAcc / total) #divied the total it got right by the total
         
@@ -115,12 +121,13 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
 #            torch.save(model.state_dict(),path) #saving the most accurate instance of the model for testing
 #            bestAcc = accuracy
         
-        if validLoss < bestValidLoss:
-            path = './Models/ModelsForTesting/%sModelTest.pth'%(modelType)
+        #'./Models/ModelsForTesting/BasicModelTest.pth'
+        if (validLoss / len(validloader)) < bestValidLoss:
+            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
             torch.save(model.state_dict(),path) #saving the model when valid loss stops decreasing
             bestValidLoss = validLoss
 
-        print('Epoch:%d | TrainingLoss:%.4f  | Validation Loss:%.4f | Accuracy:%.2f'%(epoch, trainLoss / len(trainloader), validLoss / len(validloader), bestAcc)) 
+        print('Epoch:%d | TrainingLoss:%.4f  | ValidationLoss:%.4f | Accuracy:%.2f'%(epoch, trainLoss / len(trainloader), validLoss / len(validloader), accuracy)) 
         saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
 
 
@@ -139,7 +146,7 @@ def displayTrainSet(trainloader):
     img = img / 2 + 0.5  # unnormalize
     #gets random image
     npimg = img.numpy()
-    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    #plt.imshow(np.transpose(npimg, (1, 2, 0)))
 
 def selectModelType():
     modelType = ""
@@ -147,11 +154,13 @@ def selectModelType():
         modelType = input("What Model would you like to use? (Basic, Linear, CNN): ")
         if(modelType.__eq__("Basic")):
             model = BasicModel.BasicModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: ex.rpeat(3,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("Linear")):
-            model = linearModel.Net()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+            model = LinearModel.Net()
+            #flatten
+
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("CNN")):
             print("Not implemented yet, selct another")
