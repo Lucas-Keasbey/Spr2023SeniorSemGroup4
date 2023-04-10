@@ -9,10 +9,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-learningRate = 0.01
-targetVal = 5
-
 class Net(nn.Module):
     
     def __init__(self):
@@ -24,23 +20,11 @@ class Net(nn.Module):
         self.fc5 = nn.Linear(50, 10)
     
     def forward(self, x):
+        x = torch.flatten(x,1)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = F.relu(self.fc4(x))
-        x = F.sigmoid(self.fc5(x))
+        x = torch.sigmoid(self.fc5(x))
         return x
 
-net = Net()
-target = targetVal
-criterion = nn.BCELoss()
-
-optimizer = torch.optim.SGD(net.parameters(), lr=learningRate)
-
-optimizer.zero_grad()
-output = net(input)
-loss = criterion(output, target)
-loss.backward()
-optimizer.step()
-
-output = net(input)
