@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from Models.ModelClassFiles import BasicModel
 from Models.ModelClassFiles import LinearModel
+from Models.ModelClassFiles import CnnModel
 import time
 import DataSaver
 
@@ -26,14 +27,18 @@ def main():
     #Edit these for training for now
     BATCH_SIZE = 28
     learningRate = 0.0075
-    numEpochs = 30
+    numEpochs = 10
 
     ##picking model
     modelType, model, transform = selectModelType()
   
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
     
-    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    #For running on Visual Studio
+    #trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    
+    #For running on Spyder
+    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set
 
     # use 30% of training data for validation, 70% for training
     trainSetSize = int(len(trainset) * 0.7)
@@ -57,7 +62,7 @@ def main():
 
     
     saver = DataSaver.dataSaver(numEpochs, learningRate, BATCH_SIZE, modelType)
-    saver.initialize()
+    #saver.initialize()
     
     print("\nBegining Training and Validation...\n")
     startTime = time.time()
@@ -124,11 +129,11 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
         #'./Models/ModelsForTesting/BasicModelTest.pth'
         if (validLoss / len(validloader)) < bestValidLoss:
             path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
-            torch.save(model.state_dict(),path) #saving the model when valid loss stops decreasing
+            #torch.save(model.state_dict(),path) #saving the model when valid loss stops decreasing
             bestValidLoss = validLoss
 
         print('Epoch:%d | TrainingLoss:%.4f  | ValidationLoss:%.4f | Accuracy:%.2f'%(epoch, trainLoss / len(trainloader), validLoss / len(validloader), accuracy)) 
-        saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
+        #saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
 
 
 def printSetStats(device, trainloader):
@@ -154,7 +159,7 @@ def selectModelType():
         modelType = input("What Model would you like to use? (Basic, Linear, CNN): ")
         if(modelType.__eq__("Basic")):
             model = BasicModel.BasicModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: ex.rpeat(3,1,1))]) #maniputlating the set to feed into the model for training
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("Linear")):
             model = LinearModel.Net()
@@ -163,7 +168,9 @@ def selectModelType():
             transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("CNN")):
-            print("Not implemented yet, selct another")
+            model = CnnModel.ConvModel()
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(784,1,1))]) #maniputlating the set to feed into the model for training
+            break
         else:
             print("Awnser not valid, please try again")
 
