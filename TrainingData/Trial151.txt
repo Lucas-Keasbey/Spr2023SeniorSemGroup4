@@ -1,0 +1,9 @@
+Trial:151	Epochs:25	LearningRate:0.090	BatchSize:64	Model:Linear
+Epoch:0	TrainingLoss:1.903	ValidLoss:1.802	Accuracy:34.567
+Epoch:1	TrainingLoss:1.824	ValidLoss:1.833	Accuracy:30.178
+Epoch:2	TrainingLoss:1.899	ValidLoss:1.984	Accuracy:27.211
+Epoch:3	TrainingLoss:1.961	ValidLoss:2.097	Accuracy:19.483
+Epoch:4	TrainingLoss:2.166	ValidLoss:2.151	Accuracy:20.283
+Epoch:5	TrainingLoss:2.344	ValidLoss:2.415	Accuracy:10.089
+Epoch:6	TrainingLoss:2.419	ValidLoss:2.415	Accuracy:10.089
+Epoch:7	TrainingLoss:2.420	ValidLoss:2.415	Accuracy:10.089

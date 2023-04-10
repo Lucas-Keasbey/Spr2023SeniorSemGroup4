@@ -14,15 +14,25 @@ import time
 import DataSaver
 
 def main():
+
+#   !!!This is the old training code, do not use!!!
+#   !!!Parameters for various functions have been changed and it will not run correctly!!!
+#   !!!Please use AllModelTrainCode.py!!!!
     
+    while(True):
+        awns = input("This is old training code, please run AllModelTrainCode.py. If you want to run anyway, type Y")
+        if(awns == "Y"):
+            break
     ##BATCH_SIZE = int(input("Enter Batch Size: "))
     ##learning_rate = float(input("Enter Learning Rate: "))
     ##num_epochs = int(input("Enter Number of Epochs: "))
 
     #for testing
     BATCH_SIZE = 64
-    learning_rate = 0.01
-    num_epochs = 1
+    learning_rate = 0.05
+    num_epochs = 25
+
+    print("Running Model with %d epochs, %d batch size, and %.4f learning rate\n"%(num_epochs,BATCH_SIZE,learning_rate))
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))])
     trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
@@ -37,7 +47,7 @@ def main():
     trainset, validset, testset = data.random_split(trainset,[train_set_size,valid_set_size, test_set_size],generator=seed)
     validloader = data.DataLoader(validset, batch_size=1, shuffle=True)
     trainloader = data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
-    testloader = data.DataLoader(testset, batch_size=1, shuffle=True)
+    testloader = data.DataLoader(testset, batch_size=1, shuffle=True) ##test set in on a training set
     
     model = BasicModel.BasicModel()
     
@@ -60,7 +70,7 @@ def main():
     saver = DataSaver.dataSaver(num_epochs, learning_rate, BATCH_SIZE)
     saver.initialize()
    
-    print("Begining Training and Validation...\n")
+    print("\nBegining Training and Validation...\n")
     startTime = time.time()
     
     best_accuracy = 0.0 
@@ -115,9 +125,9 @@ def main():
         if accuracy > best_accuracy: 
             torch.save(model.state_dict(),'./Models/ModelsForTesting/BasicModelTest.pth') #saving model for testing
             best_accuracy = accuracy
-        
+        #inlcude saving when valid loss stops decreasing
         print('Epoch:%d | TrainingLoss:%.4f  | Validation Loss:%.4f | Accuracy:%.2f'%(epoch, train_loss / len(trainloader), valid_loss / len(validloader), best_accuracy)) 
-        saver.saveRunData(epoch, (valid_loss / len(validloader)), (valid_running_acc/ len(validloader)))
+        saver.saveRunData(epoch,(train_loss  / len(trainloader)), (valid_loss / len(validloader)), (accuracy))
 
        
 
