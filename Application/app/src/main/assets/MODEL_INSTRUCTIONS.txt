@@ -1,0 +1,12 @@
+https://medium.com/mlearning-ai/integrating-custom-pytorch-models-into-an-android-app-a2cdfce14fe8
+
+models should be named with the following convention in this folder
+
+Basic model:
+modelBasic.pt
+
+Linear model:
+modelLinear.pt
+
+CNN model:
+modelCNN.pt
