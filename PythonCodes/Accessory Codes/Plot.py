@@ -19,18 +19,20 @@ files = [""] * 3
 # files[2] = filePrefix + "Trial139.txt"
 
 # Data from training and testing: LR: 0.007, 0.008, 0.009, Epochs: 20
-# files[0] = filePrefix + "Trial145.txt"
-# files[1] = filePrefix + "Trial146.txt"
-# files[2] = filePrefix + "Trial147.txt"
+files[0] = filePrefix + "Trial145.txt"
+files[1] = filePrefix + "Trial146.txt"
+files[2] = filePrefix + "Trial147.txt"
 
 # Data from training and testing: LR: 0.01, 0.03, 0.05, Epochs: 25
-files[0] = filePrefix + "Trial140.txt"
-files[1] = filePrefix + "Trial141.txt"
-files[2] = filePrefix + "Trial148.txt"
+# files[0] = filePrefix + "Trial140.txt"
+# files[1] = filePrefix + "Trial141.txt"
+# files[2] = filePrefix + "Trial149.txt"
 
 print("Loading Plotter")
 
-lrPlot = DataPlotter(files)
+Plot = DataPlotter(files)
 
-lrPlot.plotAcc()
+Plot.plotLoss(147)
+
+#Plot.plotAcc()
 

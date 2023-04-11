@@ -56,14 +56,15 @@ class DataPlotter:
         return d
     
 #Plots the loss of each trial
-    def plotLoss(self):
+    def plotLoss(self, id):
         for trial in self.data:
-            name = "Trial:%d Learning Rate:%.3f"%(trial.trial, trial.lr)
-            plt.plot(trial.loss, label = name)
+            if(trial.trial==id):
+                plt.plot(trial.trainLoss, label = "Training")
+                plt.plot(trial.testLoss, label = "Testing")
+                plt.title("Loss\nTrial:%d Learning Rate:%.3f"%(trial.trial, trial.lr))
         plt.legend()
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
-        plt.title("Training Loss")
         plt.show()
                 
 #Plots the accuracy of each trial
