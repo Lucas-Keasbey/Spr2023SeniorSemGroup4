@@ -1,0 +1,1 @@
+Trial:154	Epochs:30	LearningRate:0.005	BatchSize:64	Model:Linear

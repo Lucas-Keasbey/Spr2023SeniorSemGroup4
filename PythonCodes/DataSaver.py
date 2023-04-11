@@ -7,10 +7,11 @@ class dataSaver:
     #writeFile = None
     #writeFileName = ""
 
-    def __init__(self, numEpochs, learnRate, batchSize):
+    def __init__(self, numEpochs, learnRate, batchSize, modelType):
         self.numEpochs = numEpochs
         self.learnRate = learnRate
         self.batchSize = batchSize
+        self.modelType = modelType
 
     def initialize(self):
         ##get trialnum
@@ -29,19 +30,19 @@ class dataSaver:
         ##First line of trial
         self.writeFileName = ('./TrainingData/Trial%d.txt'%(trialNum))
         writeFile = open(self.writeFileName,'w')
-        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.2f\tBatchSize:%d\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize)
+        strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.3f\tBatchSize:%d\tModel:%s\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize, self.modelType)
         writeFile.write(strinit)
         writeFile.close()
     
     #saves the validation data from model
-    def saveRunData(self, epoch, loss, acc):
+    def saveRunData(self, epoch, trainloss, validloss, acc):
         writeFile = open(self.writeFileName,'a')
-        writeFile.write("Epoch:%d\tLoss:%.2f%\tAccuaracy:%.2f\n"% (epoch, loss, acc))
+        writeFile.write("Epoch:%d\tTrainingLoss:%.3f\tValidLoss:%.3f\tAccuracy:%.3f\n"% (epoch, trainloss, validloss, acc))
         writeFile.close()
 
     def saveTestAcc(self,acc):
         writeFile = open(self.writeFileName,'a')
-        writeFile.write("Testing Accuracy:%d%\n"% (acc))
+        writeFile.write("TestingAccuracy:%.2f\n"% (acc))
         writeFile.close()
 
 

@@ -13,7 +13,7 @@ def main():
     gpu_available = torch.cuda.is_available()
     print(f"Gpu Available? {gpu_available}")
     print("Using torch",torch.__version__)
-    BATCH_SIZE = 64
+    BATCH_SIZE = 1
     ## transformations
     transform = transforms.Compose([transforms.ToTensor()])
     
