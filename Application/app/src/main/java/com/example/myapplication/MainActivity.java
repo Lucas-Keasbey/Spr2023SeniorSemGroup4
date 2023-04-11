@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
         modelGroup = findViewById(R.id.ModelGroup);
 
         try {
-            modelBasic = LiteModuleLoader.load(assetFilePath("modelBasic.pt"));
-            modelLinear = LiteModuleLoader.load(assetFilePath("modelLinear.pt"));
-            modelCNN = LiteModuleLoader.load(assetFilePath("modelCNN.pt"));
+            modelBasic = LiteModuleLoader.load(assetFilePath("BasicModel.pt"));
+            modelLinear = LiteModuleLoader.load(assetFilePath("LinearModel.pt"));
+            modelCNN = LiteModuleLoader.load(assetFilePath("CNNModel.pt"));
         } catch (IOException e) {
             System.out.println(e);
         }
