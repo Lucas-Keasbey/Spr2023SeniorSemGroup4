@@ -1,14 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\data",
-    "\\data\\FashionMNIST",
     "\\PythonCodes",
     "\\PythonCodes\\Models",
     "\\PythonCodes\\Models\\ModelClassFiles",
     "\\PythonCodes\\Models\\ModelsForTesting",
+    "\\PythonCodes\\Models\\TrainedModels",
     "\\TrainingData"
   ],
-  "SelectedNode": "\\PythonCodes\\AllModelTrainCode.py",
+  "SelectedNode": "\\TrainingData\\Trial165.txt",
   "PreviewInSolutionExplorer": false
 }

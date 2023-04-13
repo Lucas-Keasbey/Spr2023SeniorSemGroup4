@@ -16,15 +16,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from Models.ModelClassFiles import BasicModel
 from Models.ModelClassFiles import LinearModel
+from Models.ModelClassFiles import CNN
 import time
 import DataSaver
 
 
 def main():
-    ##started at 12pm
 
     #Edit these for training for now
-    BATCH_SIZE = 28
+    BATCH_SIZE = 64
     learningRate = 0.0075
     numEpochs = 30
 
@@ -123,7 +123,7 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
         
         #'./Models/ModelsForTesting/BasicModelTest.pth'
         if (validLoss / len(validloader)) < bestValidLoss:
-            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
+            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pt'%(modelType)
             torch.save(model.state_dict(),path) #saving the model when valid loss stops decreasing
             bestValidLoss = validLoss
 
@@ -154,7 +154,7 @@ def selectModelType():
         modelType = input("What Model would you like to use? (Basic, Linear, CNN): ")
         if(modelType.__eq__("Basic")):
             model = BasicModel.BasicModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: ex.rpeat(3,1,1))]) #maniputlating the set to feed into the model for training
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("Linear")):
             model = LinearModel.Net()
@@ -163,7 +163,9 @@ def selectModelType():
             transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("CNN")):
-            print("Not implemented yet, selct another")
+            model = CNN.ConvModel();
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+            break
         else:
             print("Awnser not valid, please try again")
 

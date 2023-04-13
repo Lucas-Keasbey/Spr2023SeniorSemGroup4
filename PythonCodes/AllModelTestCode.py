@@ -96,6 +96,7 @@ def testClassAcc(testloader, model, device):
         numLabels = len(labels.shape)
         break
     
+    #confusionmatix.sipy
     classCorrect = list(0. for i in range(10))
     classTotal = list(0. for i in range(10))
     
