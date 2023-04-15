@@ -25,7 +25,7 @@ def main():
     ##started at 12pm
 
     #Edit these for training for now
-    BATCH_SIZE = 28
+    BATCH_SIZE = 64
     learningRate = 0.0075
     numEpochs = 10
 
@@ -169,7 +169,7 @@ def selectModelType():
             break
         elif(modelType.__eq__("CNN")):
             model = CnnModel.ConvModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(784,1,1))]) #maniputlating the set to feed into the model for training
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
             break
         else:
             print("Awnser not valid, please try again")
