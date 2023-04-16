@@ -110,7 +110,7 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
             validLoss += loss.detach().item()
 
             #calc acc
-            _, predicted = torch.max(guess, 1) #grabs the largest probability outputted by the model
+            value, predicted = torch.max(guess, 1) #grabs the largest probability outputted by the model
             validRunAcc += (predicted == labels).sum().item() #add together the ones it got right
             total += labels.size(0)
 

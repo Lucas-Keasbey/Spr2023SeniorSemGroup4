@@ -13,17 +13,22 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 import math
 import matplotlib.pyplot as plt
-import numpy as np
+import sys
+import matplotlib
+#matplotlib.use('Agg')
+import numpy as np 
 from sklearn.metrics import f1_score
 from Models.ModelClassFiles import BasicModel
 from Models.ModelClassFiles import LinearModel
 import time
 import DataSaver
+from sklearn import metrics
 
 def main():
     print("Beginning Testing...\n")
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    
+    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device= torch.device("cpu") #dont really need gpu for testing
+
     modelType, modelTest, transform = selectModelType()
     modelTest = modelTest.to(device)
     testset = torchvision.datasets.FashionMNIST(root='./data', train=False, download=False, transform=transform)
@@ -32,15 +37,13 @@ def main():
    
     #load model
     path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
-    #C:\Users\starm\Source\Repos\Spr2023SeniorSemGroup4\PythonCodes\Models\ModelsForTesting\BasicModelTest.pth
-    modelTest.load_state_dict(torch.load('./PythonCodes/Models/ModelsForTesting/BasicModelTest.pth'))
+    modelTest.load_state_dict(torch.load(path))
     print("\nTesting %s model\n"%(modelType))
 
 
 
     testAcc(testloader,modelTest,device)
-    testClassAcc(testloader,modelTest,device)
-    calcF1Score(testloader,modelTest,device)
+    #testClassAcc(testloader,modelTest,device)
 
 
 
@@ -69,10 +72,14 @@ def selectModelType():
     return modelType, model, transform
 
 def testAcc(testloader, modelTest, device):
-    BestTestAcc = 0.0
-    runningAcc = 0.0
-    total = 0 
+    
     modelTest.eval()
+    totalTestAcc = 0.0
+    total = 0
+    predictions = []
+    actuals = []
+    actuals = np.array(actuals)
+    predictions = np.array(predictions)
     with torch.no_grad(): 
         for i, (images, labels) in enumerate(testloader, 0):
 
@@ -81,20 +88,57 @@ def testAcc(testloader, modelTest, device):
             
             labels = labels.to(torch.float32) 
             predicted_outputs = modelTest(images) 
-            _, predicted = torch.max(predicted_outputs, 1) 
-            total += labels.size(0) 
-            runningAcc += (predicted == labels).sum().item() 
+            value, prediction = torch.max(predicted_outputs, 1) #grab the highest prediction
+            actuals = np.append(actuals,labels)
+            predictions = np.append(predictions,prediction)
+            totalTestAcc += metrics.accuracy_score(labels,prediction)
+            #totalPrecision += metrics.precision_score(labels, prediction, pos_label=1, average = 'samples')
+            #totalRecall += metrics.recall_score(labels,prediction)
 
-            #f1Score
-            f1Score = f1_score(labels.data, predicted)
 
-        bestTestAcc = (100 * runningAcc / total)
-        print("TestingAccuracy: %.2f, F1 Score: %.2f"%(bestTestAcc,f1Score)) 
+            total += labels.size(0)
+
+        testAcc = (totalTestAcc / total) * 100    
+               
+
+        macroPrecision = metrics.precision_score(actuals, predictions, average = 'macro')  ##need to get fp's and tp's
+        macroRecall = metrics.recall_score(actuals, predictions, average = 'macro')  ##tp's and fns
+        macroF1 = metrics.f1_score(actuals, predictions, average = 'macro')
+        
+        weightedPrecision =  metrics.precision_score(actuals, predictions, average = 'weighted')
+        weightedRecall = metrics.recall_score(actuals, predictions, average = 'weighted')
+        weightedF1 = metrics.f1_score(actuals, predictions, average = 'weighted')
+
+        print("Overall Accuracy: %.2f"%(testAcc))
+        print("Macro Presision: %.4f, Macro Recall: %.4f, Macro F1Score: %.4f"%(macroPrecision,macroRecall,macroF1))
+        print("Weighted Presision: %.4f, Weighted Recall: %.4f, Weighted F1Score: %.4f"%(weightedPrecision,weightedRecall,weightedF1))
+
+        showConMat(actuals,predictions)
+
+
+def showConMat(actual,predicted):
+    confusion_matrix = metrics.confusion_matrix(actual, predicted)
+
+    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ['0-T-shirt','1-Trouser','2-Pullover','3-Dress','4-Coat','5-Sandal','6-Shirt','7-Sneaker','8-Bag','9-Ankle Boot'])
+    #cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = [0,1,2,3,4,5,6,7,8,9]) #x-axis spacing is weird
+
+    cm_display.plot()
+    plt.show()
+
+    plt.savefig(sys.stdout.buffer)
+    #sys.stdout.flush()
+
+              
+
 
 def testClassAcc(testloader, model, device):
-    for images, labels in testloader:
-        numLabels = len(labels.shape)
-        break
+    modelTest.eval()
+    totalTestAcc = 0.0
+    total = 0
+    predictions = []
+    actuals = []
+    actuals = np.array(actuals)
+    predictions = np.array(predictions)
     
     #confusionmatix.sipy
     classCorrect = list(0. for i in range(10))
@@ -106,9 +150,9 @@ def testClassAcc(testloader, model, device):
             labels = labels.to(device)
 
             guess = model(images)
-            _, predicted = torch.max(guess, 1) ##grabs the highest probability
+            value, predicted = torch.max(guess, 1) ##grabs the highest probability
             correct = (predicted == labels).squeeze()
-            for i in range(10):#64=batch size
+            for i in range(10):
                 label = labels[i]
                 classCorrect[label] += correct[i].item()
                 classTotal[label] += 1
@@ -118,3 +162,4 @@ def testClassAcc(testloader, model, device):
             classes[i], 100 * classCorrect[i] / classTotal[i]))
 
 main()
+
