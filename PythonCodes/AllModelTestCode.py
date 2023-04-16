@@ -100,7 +100,7 @@ def testAcc(testloader, modelTest, device):
 
         testAcc = (totalTestAcc / total) * 100    
                
-
+        #Scores for all classes
         macroPrecision = metrics.precision_score(actuals, predictions, average = 'macro')  ##need to get fp's and tp's
         macroRecall = metrics.recall_score(actuals, predictions, average = 'macro')  ##tp's and fns
         macroF1 = metrics.f1_score(actuals, predictions, average = 'macro')
@@ -110,13 +110,32 @@ def testAcc(testloader, modelTest, device):
         weightedF1 = metrics.f1_score(actuals, predictions, average = 'weighted')
 
         print("Overall Accuracy: %.2f"%(testAcc))
-        print("Macro Presision: %.4f, Macro Recall: %.4f, Macro F1Score: %.4f"%(macroPrecision,macroRecall,macroF1))
-        print("Weighted Presision: %.4f, Weighted Recall: %.4f, Weighted F1Score: %.4f"%(weightedPrecision,weightedRecall,weightedF1))
+        print("Macro Precision: %.4f, Macro Recall: %.4f, Macro F1Score: %.4f"%(macroPrecision,macroRecall,macroF1))
+        print("Weighted Precision: %.4f, Weighted Recall: %.4f, Weighted F1Score: %.4f"%(weightedPrecision,weightedRecall,weightedF1))
 
-        showConMat(actuals,predictions)
+
+        confusion_matrix = metrics.confusion_matrix(actuals, predictions)
+        testClassAcc(confusion_matrix)
+
+        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ['0-T-shirt','1-Trouser','2-Pullover','3-Dress','4-Coat','5-Sandal','6-Shirt','7-Sneaker','8-Bag','9-Ankle Boot'])
+        #cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = [0,1,2,3,4,5,6,7,8,9]) #x-axis spacing is weird
+
+        cm_display.plot()
+        plt.show()
+
+        plt.savefig(sys.stdout.buffer)
+
+        confusion_matrix = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
+        confusion_matrix.diagonal()
+
+        
+
+
+
 
 
 def showConMat(actual,predicted):
+    #confusionmatix.sipy
     confusion_matrix = metrics.confusion_matrix(actual, predicted)
 
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ['0-T-shirt','1-Trouser','2-Pullover','3-Dress','4-Coat','5-Sandal','6-Shirt','7-Sneaker','8-Bag','9-Ankle Boot'])
@@ -131,35 +150,43 @@ def showConMat(actual,predicted):
               
 
 
-def testClassAcc(testloader, model, device):
-    modelTest.eval()
-    totalTestAcc = 0.0
-    total = 0
-    predictions = []
-    actuals = []
-    actuals = np.array(actuals)
-    predictions = np.array(predictions)
+def testClassAcc(cm):
+    per_class_accuracies = {}
+    classes = [0,1,2,3,4,5,6,7,8,9]
+    # Calculate the accuracy for each one of our classes
+    #idx = class id, cls = class
+    for idx, cls in enumerate(classes):
+        print("\n----Class %d----"%(cls))
+        # True negatives are all the samples that are not our current GT class (not the current row) 
+        # and were not predicted as the current class (not the current column)
+        #tn = np.sum(np.delete(np.delete(cm, idx, axis=0), idx, axis=1))
+        #fn = np.sum(cm[cls]) - tn
     
-    #confusionmatix.sipy
-    classCorrect = list(0. for i in range(10))
-    classTotal = list(0. for i in range(10))
+        # True positives are all the samples of our current GT class that were predicted as such
+        #tp = cm[idx, idx]
+        #fp = np.sum(cm[:,cls]) - tp
+
+        tp = cm[idx,idx]
+        fn = np.sum(cm[idx]) - tp
+        fp = np.sum(cm[:,idx]) - tp
+        tn = np.sum(cm) - tp - fn - fp
+        
+        
+        
+        recall = tp / (tp + fn)
+        precision = tp / (tp + fp)
+        f1 = 2 * ((precision * recall) / (precision + recall))
+
     
-    with torch.no_grad():
-        for i, (images, labels) in enumerate(testloader, 0):
-            images = images.to(device)
-            labels = labels.to(device)
+        # The accuracy for the current class is the ratio between correct predictions to all predictions
+        per_class_accuracies[cls] = (tp + tn) / np.sum(cm)
+        print("Overall Accuracry: %.2f"%(per_class_accuracies[cls] * 100))
+        print("Recall: %.4f, Precision: %.4f, F1 Score: %.4f"%(recall,precision,f1))
+        print("Confusion Matrix: ")
+        print("| %d %d |\n| %d %d |"%(tn,fp,fn,tp))
+    
 
-            guess = model(images)
-            value, predicted = torch.max(guess, 1) ##grabs the highest probability
-            correct = (predicted == labels).squeeze()
-            for i in range(10):
-                label = labels[i]
-                classCorrect[label] += correct[i].item()
-                classTotal[label] += 1
-
-    for i in range(numberLabels):
-        print('Accuracy of %5s : %2d %%' % (
-            classes[i], 100 * classCorrect[i] / classTotal[i]))
+    
 
 main()
 
