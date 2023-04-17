@@ -19,10 +19,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import org.pytorch.*;
+
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,13 +42,12 @@ public class MainActivity extends AppCompatActivity {
                     	"Ankle boot",
                         "Not implemented"};
     ImageView pic;
-    Button select;
-    Button classify;
+    Button select, classify;
     TextView text;
-    RadioButton basicButton;
-    RadioButton linearButton;
-    RadioButton cnnButton;
+    RadioButton basicButton, linearButton, cnnButton;
     RadioGroup modelGroup;
+
+    Module modelBasic, modelLinear, modelCNN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         linearButton = findViewById(R.id.LinearRadio);
         cnnButton = findViewById(R.id.CNNRadio);
         modelGroup = findViewById(R.id.ModelGroup);
+
+        try {
+            modelBasic = LiteModuleLoader.load(assetFilePath("BasicModel.pt"));
+            modelLinear = LiteModuleLoader.load(assetFilePath("LinearModel.pt"));
+            modelCNN = LiteModuleLoader.load(assetFilePath("CNNModel.pt"));
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,9 +89,18 @@ public class MainActivity extends AppCompatActivity {
         classify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Module active;
+                int id = modelGroup.getCheckedRadioButtonId();
+
+                if (id == basicButton.getId())
+                    active = modelBasic;
+                else if (id == linearButton.getId())
+                    active = modelLinear;
+                else
+                    active = modelCNN;
 
                 //sets the click event for classify image button
-                text.setText(labels[predictLabel()]);
+                text.setText(labels[predictLabel(active)]);
             }
 
         });
@@ -106,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    protected int predictLabel(){
+    //following method is to be implemented
+    protected int predictLabel(Module active){
         try{
             // run image through model and process prediction to get label index
 
@@ -115,6 +136,26 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return 10;
+    }
+
+    //following method is pulled from standard Android Studio tools to get file path
+    public String assetFilePath(String assetName) throws IOException {
+        File file = new File(this.getFilesDir(), assetName);
+        if (file.exists() && file.length() > 0) {
+            return file.getAbsolutePath();
+        }
+
+        try (InputStream is = this.getAssets().open(assetName)) {
+            try (OutputStream os = new FileOutputStream(file)) {
+                byte[] buffer = new byte[4 * 1024];
+                int read;
+                while ((read = is.read(buffer)) != -1) {
+                    os.write(buffer, 0, read);
+                }
+                os.flush();
+            }
+            return file.getAbsolutePath();
+        }
     }
 
 
