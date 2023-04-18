@@ -144,14 +144,14 @@ def testClassAcc(cm):
         
         recall = tp / (tp + fn) #formula for recall
         precision = tp / (tp + fp) #formula for precision
-        f1 = 2 * ((precision * recall) / (precision + recall)) #formula for f1
+        f1 = 2 * (precision * recall) / (precision + recall) #formula for f1
 
     
         # The accuracy for the current class is the ratio between correct predictions to all predictions
         per_class_accuracies[cls] = (tp + tn) / np.sum(cm)
         print("Overall Accuracry: %.2f"%(per_class_accuracies[cls] * 100))
         print("Recall: %.4f, Precision: %.4f, F1 Score: %.4f"%(recall,precision,f1))
-        print("Confusion Matrix: (Actual by Predictied")
+        print("Confusion Matrix: (Actual by Predictied)")
         print("| TP:%d FN:%d |\n| FP:%d TN:%d |"%(tp,fn,fp,tn))
     
 
