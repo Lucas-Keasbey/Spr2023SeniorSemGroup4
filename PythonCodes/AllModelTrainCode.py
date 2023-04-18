@@ -16,13 +16,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from Models.ModelClassFiles import BasicModel
 from Models.ModelClassFiles import LinearModel
-from Models.ModelClassFiles import CnnModel
+from Models.ModelClassFiles import CNN
 import time
 import DataSaver
 
 
 def main():
-    ##started at 12pm
 
     #Edit these for training for now
     BATCH_SIZE = 64
@@ -115,7 +114,7 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
             validLoss += loss.detach().item()
 
             #calc acc
-            _, predicted = torch.max(guess, 1) #grabs the largest probability outputted by the model
+            value, predicted = torch.max(guess, 1) #grabs the largest probability outputted by the model
             validRunAcc += (predicted == labels).sum().item() #add together the ones it got right
             total += labels.size(0)
 
@@ -168,7 +167,7 @@ def selectModelType():
             transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("CNN")):
-            model = CnnModel.ConvModel()
+            model = CNN.ConvModel();
             transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
             break
         else:
