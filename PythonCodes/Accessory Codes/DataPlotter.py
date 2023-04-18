@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 class DataPlotter:
     def __init__(self, fileNames):
         self.fileNames = fileNames.copy()
+        print("File is " + fileNames[0])
         self.data = self.createData(fileNames)
     
 #Sets the number of files. Was created then lost its need. Still here just in case though
@@ -14,13 +15,13 @@ class DataPlotter:
         return num
 
 #Reads all of the data from the file names, then returns an array of a custom "data" object
-    def createData(fileNames):
+    def createData(self, fileNames):
         d = []        
         
         #Looks at every file in the name list
         for name in fileNames:
             #variables for the "data" object
-            trial, epochs, lr, loss, acc = -1, 0, 0.0, [], []
+            trial, epochs, lr, trainLoss, testLoss, acc = -1, 0, 0.0, [], [], []
             f = open(name, "r")
             for line in f:
                 #Each line is split up into pieces of data separated by tabs
@@ -33,46 +34,56 @@ class DataPlotter:
                         trial = int(piece[1])
                     elif piece[0] == "Epochs":
                         epochs = int(piece[1])
-                    elif piece[0] == "Learning Rate":
+                    elif piece[0] == "lr":
                         lr = float(piece[1])
-                    elif piece[0] == "loss":
-                        loss.append(float(piece[1]))
-                    elif piece[0] == "acc":
+                    elif piece[0] == "LearningRate":
+                        lr = float(piece[1])
+                    elif piece[0] == "Loss":
+                        trainLoss.append(float(piece[1]))
+                    elif piece[0] == "TrainingLoss":
+                        trainLoss.append(float(piece[1]))
+                    elif piece[0] == "ValidLoss":
+                        testLoss.append(float(piece[1]))
+                    elif piece[0] == "Accuracy":
+                        acc.append(float(piece[1]))
+                    elif piece[0] == "Accuaracy":
                         acc.append(float(piece[1]))
                         
             #Adds the data object into the array                                            
-            d.append(DataSet(trial, epochs, lr, loss, acc))
+            d.append(DataSet(trial, epochs, lr, trainLoss, testLoss, acc))
          
         #returns all of the data
         return d
     
 #Plots the loss of each trial
-    def plotLoss(self):
+    def plotLoss(self, id):
         for trial in self.data:
-            name = "Trial:" + trial.trial +"\tLearning Rate:" + trial.lr
-            plt.plot(trial.loss, label = name)
-            plt.legend()
-            plt.xlabel("Epoch")
-            plt.ylabel("Loss")
-            plt.title("Loss")
-            plt.show()
+            if(trial.trial==id):
+                plt.plot(trial.trainLoss, label = "Training")
+                plt.plot(trial.testLoss, label = "Testing")
+                plt.title("Loss\nTrial:%d Learning Rate:%.3f"%(trial.trial, trial.lr))
+        plt.legend()
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.show()
                 
 #Plots the accuracy of each trial
     def plotAcc(self):
         for trial in self.data:
-            name = "Trial:" + trial.trial +"\tLearning Rate:" + trial.lr
+            name = "Trial:%d LR:%.3f Epochs:%d"%(trial.trial, trial.lr, trial.epochs)
             plt.plot(trial.acc, label = name)
-            plt.legend()
-            plt.xlabel("Epoch")
-            plt.ylabel("Acc")
-            plt.title("Accuracy")
-            plt.show()    
+        plt.legend()
+        plt.xlabel("Epoch")
+        plt.ylabel("Acc")
+        plt.title("TrainingAccuracy")
+        plt.show()    
             
 class DataSet:
-    def __init__(self, trial, epochs, lr, loss, acc):
+    def __init__(self, trial, epochs, lr, trainLoss, testLoss, acc):
         self.trial = trial
         self.epochs = epochs
         self.lr = lr
-        self.loss = loss.copy()
+        self.trainLoss = trainLoss.copy()
+        self.testLoss = testLoss.copy()
         self.acc = acc.copy()
         
