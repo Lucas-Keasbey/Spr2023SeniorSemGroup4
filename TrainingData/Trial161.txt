@@ -1,0 +1,1 @@
+Trial:161	Epochs:30	LearningRate:0.007	BatchSize:64	Model:CNN
