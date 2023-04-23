@@ -9,6 +9,8 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+#This code is a very primitive training code for inital testing and reference, please run AllModelTrainCode instead
+
 def main():
     gpu_available = torch.cuda.is_available()
     print(f"Gpu Available? {gpu_available}")

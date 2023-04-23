@@ -20,6 +20,7 @@ import numpy as np
 from sklearn.metrics import f1_score
 from Models.ModelClassFiles import BasicModel
 from Models.ModelClassFiles import LinearModel
+from Models.ModelClassFiles import CNN
 import time
 import DataSaver
 from sklearn import metrics
@@ -52,14 +53,16 @@ def selectModelType():
         modelType = input("What Model would you like to Test? (Basic, Linear, CNN): ")
         if(modelType.__eq__("Basic")):
             model = BasicModel.BasicModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for testing
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for testing (turning data into 3 channels)
             break
         elif(modelType.__eq__("Linear")):
             model = LinearModel.Net()
             transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for testing
             break
         elif(modelType.__eq__("CNN")):
-            print("Not implemented yet, selct another")
+            model = CNN.ConvModel();
+            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training (turning data into 3 channels)
+            break
         else:
             print("Awnser not valid, please try again")
 

@@ -25,8 +25,8 @@ def main():
 
     #Edit these for training for now
     BATCH_SIZE = 64
-    learningRate = 0.0075
-    numEpochs = 30
+    learningRate = 0.01
+    numEpochs = 25
 
     ##picking model
     modelType, model, transform = selectModelType()
@@ -123,7 +123,7 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
         
         #'./Models/ModelsForTesting/BasicModelTest.pth'
         if (validLoss / len(validloader)) < bestValidLoss:
-            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pt'%(modelType)
+            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
             torch.save(model.state_dict(),path) #saving the model when valid loss stops decreasing
             bestValidLoss = validLoss
 
@@ -158,8 +158,6 @@ def selectModelType():
             break
         elif(modelType.__eq__("Linear")):
             model = LinearModel.Net()
-            #flatten
-
             transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
             break
         elif(modelType.__eq__("CNN")):
