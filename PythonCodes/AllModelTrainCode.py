@@ -33,7 +33,11 @@ def main():
   
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
     
-    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    #For running on Visual Studio
+    #trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    
+    #For running on Spyder
+    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set
 
     # use 30% of training data for validation, 70% for training
     trainSetSize = int(len(trainset) * 0.7)
@@ -57,7 +61,7 @@ def main():
 
     
     saver = DataSaver.dataSaver(numEpochs, learningRate, BATCH_SIZE, modelType)
-    saver.initialize()
+    #saver.initialize()
     
     print("\nBegining Training and Validation...\n")
     startTime = time.time()
@@ -123,12 +127,12 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
         
         #'./Models/ModelsForTesting/BasicModelTest.pth'
         if (validLoss / len(validloader)) < bestValidLoss:
-            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
+            path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pt'%(modelType)
             torch.save(model.state_dict(),path) #saving the model when valid loss stops decreasing
             bestValidLoss = validLoss
 
         print('Epoch:%d | TrainingLoss:%.4f  | ValidationLoss:%.4f | Accuracy:%.2f'%(epoch, trainLoss / len(trainloader), validLoss / len(validloader), accuracy)) 
-        saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
+        #saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
 
 
 def printSetStats(device, trainloader):
