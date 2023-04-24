@@ -19,17 +19,26 @@ from Models.ModelClassFiles import LinearModel
 from Models.ModelClassFiles import CNN
 import time
 import DataSaver
+import argparse
 
 
 def main():
-
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", help = "decides what model to train. Options are Basic, Linear, or CNN", type=str)
+    parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 30", type=int)
+    parser.add_argument("--lr", help = "decides the learning rate for the model. Default is 0.01", type=float)
+    args = parser.parse_args()
     #Edit these for training for now
     BATCH_SIZE = 64
-    learningRate = 0.01
-    numEpochs = 25
+    
+    
+    learningRate = args.lr if args.lr else 0.01
+    numEpochs = args.num_epochs if args.num_epochs else 25
 
     ##picking model
-    modelType, model, transform = selectModelType()
+    modelType = args.model if args.model else "Basic"
+    model, transform = selectModelType(modelType)
   
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
     
@@ -152,25 +161,38 @@ def displayTrainSet(trainloader):
     npimg = img.numpy()
     #plt.imshow(np.transpose(npimg, (1, 2, 0)))
 
-def selectModelType():
-    modelType = ""
-    while(True):
-        modelType = input("What Model would you like to use? (Basic, Linear, CNN): ")
-        if(modelType.__eq__("Basic")):
-            model = BasicModel.BasicModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
-            break
-        elif(modelType.__eq__("Linear")):
-            model = LinearModel.Net()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
-            break
-        elif(modelType.__eq__("CNN")):
-            model = CNN.ConvModel();
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
-            break
-        else:
-            print("Awnser not valid, please try again")
+def selectModelType(modelType):
+    """
+    Parameters
+    ----------
+    modelType : String
+        Decides what model is being used. There are three options:
+            Basic
+            Linear
+            CNN
+        If none of the options are entered, it chooses Basic as the default
 
-    return modelType, model, transform
+    Returns
+    -------
+    model : nn.Module
+        The actual model that will be trained
+    transform : transform
+        The transform
+    """
+    if(modelType.__eq__("Basic")):
+        model = BasicModel.BasicModel()
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+    elif(modelType.__eq__("Linear")):
+        model = LinearModel.Net()
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
+    elif(modelType.__eq__("CNN")):
+        model = CNN.ConvModel();
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+    else:
+        print("Answer not valid, using Basic as the default")
+        model = BasicModel.BasicModel()
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+
+    return model, transform
 
 main()

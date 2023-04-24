@@ -21,7 +21,7 @@ class DataPlotter:
         #Looks at every file in the name list
         for name in fileNames:
             #variables for the "data" object
-            trial, epochs, lr, trainLoss, testLoss, acc = -1, 0, 0.0, [], [], []
+            trial, epochs, lr, trainLoss, testLoss, acc, model = -1, 0, 0.0, [], [], [], "Basic"
             f = open(name, "r")
             for line in f:
                 #Each line is split up into pieces of data separated by tabs
@@ -48,9 +48,12 @@ class DataPlotter:
                         acc.append(float(piece[1]))
                     elif piece[0] == "Accuaracy":
                         acc.append(float(piece[1]))
+                    elif piece[0] == "Model":
+                        model = piece[1]
+                        
                         
             #Adds the data object into the array                                            
-            d.append(DataSet(trial, epochs, lr, trainLoss, testLoss, acc))
+            d.append(DataSet(trial, epochs, lr, trainLoss, testLoss, acc, model))
          
         #returns all of the data
         return d
@@ -61,7 +64,7 @@ class DataPlotter:
             if(trial.trial==id):
                 plt.plot(trial.trainLoss, label = "Training")
                 plt.plot(trial.testLoss, label = "Testing")
-                plt.title("Loss\nTrial:%d Learning Rate:%.3f"%(trial.trial, trial.lr))
+                plt.title("Loss\nModel:%s\nTrial:%d Learning Rate:%.3f"%(trial.model, trial.trial, trial.lr))
         plt.legend()
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
@@ -70,7 +73,7 @@ class DataPlotter:
 #Plots the accuracy of each trial
     def plotAcc(self):
         for trial in self.data:
-            name = "Trial:%d LR:%.3f Epochs:%d"%(trial.trial, trial.lr, trial.epochs)
+            name = "Model:%s Trial:%d LR:%.3f Epochs:%d"%(trial.model, trial.trial, trial.lr, trial.epochs)
             plt.plot(trial.acc, label = name)
         plt.legend()
         plt.xlabel("Epoch")
@@ -79,11 +82,12 @@ class DataPlotter:
         plt.show()    
             
 class DataSet:
-    def __init__(self, trial, epochs, lr, trainLoss, testLoss, acc):
+    def __init__(self, trial, epochs, lr, trainLoss, testLoss, acc, model):
         self.trial = trial
         self.epochs = epochs
         self.lr = lr
         self.trainLoss = trainLoss.copy()
         self.testLoss = testLoss.copy()
         self.acc = acc.copy()
+        self.model = model
         
