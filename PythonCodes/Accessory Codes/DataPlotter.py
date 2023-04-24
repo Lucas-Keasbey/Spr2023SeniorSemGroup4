@@ -53,7 +53,7 @@ class DataPlotter:
                         
                         
             #Adds the data object into the array                                            
-            d.append(DataSet(trial, epochs, lr, trainLoss, testLoss, acc))
+            d.append(DataSet(trial, epochs, lr, trainLoss, testLoss, acc, model))
          
         #returns all of the data
         return d
@@ -64,7 +64,7 @@ class DataPlotter:
             if(trial.trial==id):
                 plt.plot(trial.trainLoss, label = "Training")
                 plt.plot(trial.testLoss, label = "Testing")
-                plt.title("Loss\nModel:%s Trial:%d Learning Rate:%.3f"%(trial.model, trial.trial, trial.lr))
+                plt.title("Loss\nModel:%s\nTrial:%d Learning Rate:%.3f"%(trial.model, trial.trial, trial.lr))
         plt.legend()
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
