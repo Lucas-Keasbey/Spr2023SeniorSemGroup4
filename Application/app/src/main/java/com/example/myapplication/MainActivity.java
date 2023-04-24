@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     	"Sneaker",
                     	"Bag",
                     	"Ankle boot",
-                        "Not implemented"};
+                        "Model Broke"};
     ImageView pic;
     Button select, classify;
     TextView text;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup modelGroup;
 
     Module modelBasic, modelLinear, modelCNN;
+    Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             modelLinear = LiteModuleLoader.load(assetFilePath("LinearModel.pt"));
             modelCNN = LiteModuleLoader.load(assetFilePath("CNNModel.pt"));
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         select.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == 1) {
             try {
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                bitmap = BitmapFactory.decodeStream(inputStream);
                 pic.setImageBitmap(bitmap); //sets the image view to be the bitmap created from the user's image
                 classify.setEnabled(true);
 
@@ -130,12 +132,45 @@ public class MainActivity extends AppCompatActivity {
     protected int predictLabel(Module active){
         try{
             // run image through model and process prediction to get label index
-
+            Tensor inputTensor = generateTensor();
+            float[] outputArr = active.forward(IValue.from(inputTensor)).toTensor().getDataAsFloatArray();
+            return highestIndex(outputArr);
         }
         catch (Exception e){
             e.printStackTrace();
         }
+        //return fail message if it doesn't work
         return 10;
+    }
+
+    public int highestIndex(float[] arr){
+        int highest = -1;
+        float val = 0;
+        for (int i=0;i<arr.length;i++){
+            if (arr[i] > val){
+                highest = i;
+                val = arr[i];
+            }
+        }
+        return highest;
+    }
+
+    public Tensor generateTensor(){
+        Tensor out = null;
+        try{
+            Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 28, 28, false);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(scaled.getByteCount());
+            scaled.copyPixelsToBuffer(byteBuffer);
+            byteBuffer.rewind();
+            long[] shape = {3, 28, 28}; // adjust shape and channels as needed
+            float[] data = new float[byteBuffer.limit() / 4]; // Assuming 4 bytes per float
+            byteBuffer.asFloatBuffer().get(data);
+            out = Tensor.fromBlob(data, shape);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return out;
     }
 
     //following method is pulled from standard Android Studio tools to get file path
