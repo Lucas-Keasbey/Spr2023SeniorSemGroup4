@@ -1,11 +1,6 @@
+#This class is what we call during training to save various data. We then use this data to generate graphs and compare
+
 class dataSaver:
-    #numEpochs = 0
-    #learnRate = 0.0
-    #batchSize = 0
-    #trialFile = None
-    #trialNum = 0
-    #writeFile = None
-    #writeFileName = ""
 
     def __init__(self, numEpochs, learnRate, batchSize, modelType):
         self.numEpochs = numEpochs
