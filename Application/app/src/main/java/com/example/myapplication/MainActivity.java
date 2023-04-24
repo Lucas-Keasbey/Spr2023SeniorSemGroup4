@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //following method is to be implemented
     protected int predictLabel(Module active){
         try{
             // run image through model and process prediction to get label index
