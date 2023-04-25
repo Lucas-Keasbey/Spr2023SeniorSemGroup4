@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(scaled.getByteCount());
             scaled.copyPixelsToBuffer(byteBuffer);
             byteBuffer.rewind();
-            long[] shape = {3, 28, 28}; // adjust shape and channels as needed
+            long[] shape = {3, 1, 1}; // adjust shape and channels as needed
             float[] data = new float[byteBuffer.limit() / 4]; // Assuming 4 bytes per float
             byteBuffer.asFloatBuffer().get(data);
             out = Tensor.fromBlob(data, shape);
