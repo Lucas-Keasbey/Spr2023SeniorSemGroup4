@@ -1,0 +1,1 @@
+Trial:163	Epochs:2	LearningRate:0.010	BatchSize:64	Model:Basic
