@@ -26,21 +26,21 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", help = "decides what model to train. Options are Basic, Linear, or CNN", type=str)
-    parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 30", type=int)
+    parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 25", type=int)
     parser.add_argument("--lr", help = "decides the learning rate for the model. Default is 0.01", type=float)
     args = parser.parse_args()
     BATCH_SIZE = 64
     
     
     learningRate = args.lr if args.lr else 0.01
-    numEpochs = args.num_epochs if args.num_epochs else 25
+    numEpochs = args.num_epochs if args.num_epochs else 2
 
     ##picking model
     modelType = args.model if args.model else "Basic"
     model, transform = selectModelType(modelType)
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
    
-    trainloader,validloader = initializeData(BATCH_SIZE,transform)
+    trainloader,validloader = initilizeData(BATCH_SIZE,transform)
    
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     printSetStats(device,trainloader)
@@ -64,9 +64,9 @@ def main():
     saveModel(model,modelType)
 
 def saveModel(model,modelType):
-    strAwns = input("Would you like to save the trained model (Y/N)? (Previously trained model of the same type will be overwritten!!!)\n")
     PATH = ("./PythonCodes/Models/TrainedModels/%sModel.pth"%(modelType))
     while(True):
+        strAwns = input("Would you like to save the trained model (Y/N)? (Previously trained model of the same type will be overwritten!!!)\n")
         if(strAwns == "Y"):
             print("Saving model...")
             torch.save(model, PATH)
