@@ -26,38 +26,22 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", help = "decides what model to train. Options are Basic, Linear, or CNN", type=str)
-    parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 30", type=int)
+    parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 25", type=int)
     parser.add_argument("--lr", help = "decides the learning rate for the model. Default is 0.01", type=float)
     args = parser.parse_args()
-    #Edit these for training for now
     BATCH_SIZE = 64
     
     
     learningRate = args.lr if args.lr else 0.01
-    numEpochs = args.num_epochs if args.num_epochs else 25
+    numEpochs = args.num_epochs if args.num_epochs else 2
 
     ##picking model
     modelType = args.model if args.model else "Basic"
     model, transform = selectModelType(modelType)
-  
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
-    
-    #For running on Visual Studio
-    #trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
-    
-    #For running on Spyder
-    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set
-
-    # use 30% of training data for validation, 70% for training
-    trainSetSize = int(len(trainset) * 0.7)
-    validSetSize = int(len(trainset) * 0.3)
-
-    # giving the validloader a random 30% of the trainingset, 70% to the trainloader
-    seed = torch.Generator().manual_seed(42) #for randomness
-    trainset, validset = data.random_split(trainset,[trainSetSize,validSetSize],generator=seed)
-    validloader = data.DataLoader(validset, batch_size=1, shuffle=True)
-    trainloader = data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
-    
+   
+    trainloader,validloader = initilizeData(BATCH_SIZE,transform)
+   
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     printSetStats(device,trainloader)
     model = model.to(device)
@@ -70,24 +54,85 @@ def main():
 
     
     saver = DataSaver.dataSaver(numEpochs, learningRate, BATCH_SIZE, modelType)
-    #saver.initialize()
+    saver.initialize()
     
     print("\nBegining Training and Validation...\n")
     startTime = time.time()
     trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType)
     finishTime = time.time();
     print('\nTime elaspsed (seconds): %.2f'%(finishTime - startTime))
-    ##print("To test model, run the tesing code and with the respective model trained. You need to do this in order to save it")
+    saveModel(model,modelType)
 
-    strAwns = input("Would you like to save the trained model (Y/N)?\n")
+def saveModel(model,modelType):
     PATH = ("./PythonCodes/Models/TrainedModels/%sModel.pth"%(modelType))
-    if(strAwns == "Y"):
-        torch.save(model, PATH)
+    while(True):
+        strAwns = input("Would you like to save the trained model (Y/N)? (Previously trained model of the same type will be overwritten!!!)\n")
+        if(strAwns == "Y"):
+            print("Saving model...")
+            torch.save(model, PATH)
+            print("Model saved!")
+            break
+        elif(strAwns == "N"):
+            print("Model not saved")
+            break
+        else:
+            print("Invalid awnser, try again")
+ 
 
+def initilizeData(BATCH_SIZE,transform):
+    #For running on Visual Studio
+    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    
+    #For running on Spyder
+    #trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set
+
+    # use 30% of training data for validation, 70% for training
+    trainSetSize = int(len(trainset) * 0.7)
+    validSetSize = int(len(trainset) * 0.3)
+
+    # giving the validloader a random 30% of the trainingset, 70% to the trainloader
+    seed = torch.Generator().manual_seed(42) #for randomness
+    trainset, validset = data.random_split(trainset,[trainSetSize,validSetSize],generator=seed)
+    validloader = data.DataLoader(validset, batch_size=1, shuffle=True)
+    trainloader = data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
+    return trainloader, validloader
 
     
 
 def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType):
+    """
+    
+
+    Parameters
+    ----------
+    model : nn.module
+        The model being trained. Either:
+            Basic
+            Linear
+            CNN
+    numEpochs : int
+        The number of epochs the model is being trained for
+    lossFunc : nn.CrossEntropyLoss
+        The function we use to calcualte loss. In this case, it is cross entropy
+    optimizer : torch.optim.SGD
+        The function we use to optimize the model. In this case, it is stochastic gradient descent
+    trainloader : Data loader
+        The loaded set of training images
+    validloader : Data loader
+        The loaded set of validation images
+    saver : datasaver
+        Saves the accuracy and loss at each epoch into a text file
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+    modelType : string
+        Describes what type the model is. Used in the data saver.
+
+    Returns
+    -------
+    None.
+
+    """
     bestAcc = 0.0 
     bestValidLoss = 999.99
     for epoch in range(numEpochs):
@@ -141,10 +186,29 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
             bestValidLoss = validLoss
 
         print('Epoch:%d | TrainingLoss:%.4f  | ValidationLoss:%.4f | Accuracy:%.2f'%(epoch, trainLoss / len(trainloader), validLoss / len(validloader), accuracy)) 
-        #saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
+        saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
 
 
 def printSetStats(device, trainloader):
+    """
+    Function
+    ----------
+    Prints the stats of the training as it begins.
+    Displays what device the training will be run on as well as the size of the batches
+
+    Parameters
+    ----------
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+    trainloader : Data loader
+        The loaded set of training images
+
+    Returns
+    -------
+    None.
+
+    """
     print("The model will be running on", device, "device\n") 
 
     for images, labels in trainloader:
@@ -153,6 +217,21 @@ def printSetStats(device, trainloader):
        break
 
 def displayTrainSet(trainloader):
+    """
+    Function
+    ----------
+    Displays the set of data that is being trained. Mainly used to verify it was loaded correctly
+
+    Parameters
+    ----------
+    trainloader : Data loader
+        The loaded set of training images
+
+    Returns
+    -------
+    None.
+
+    """
     dataiter = iter(trainloader)
     images, labels = next(dataiter)
     img = torchvision.utils.make_grid(images)
@@ -163,14 +242,18 @@ def displayTrainSet(trainloader):
 
 def selectModelType(modelType):
     """
+    Function
+    ----------
+    Decides what model is being used. There are three options:
+        Basic
+        Linear
+        CNN
+    If none of the options are entered, it chooses Basic as the default
+    
     Parameters
     ----------
     modelType : String
-        Decides what model is being used. There are three options:
-            Basic
-            Linear
-            CNN
-        If none of the options are entered, it chooses Basic as the default
+        
 
     Returns
     -------
