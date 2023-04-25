@@ -88,6 +88,39 @@ def main():
     
 
 def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType):
+    """
+    
+
+    Parameters
+    ----------
+    model : nn.module
+        The model being trained. Either:
+            Basic
+            Linear
+            CNN
+    numEpochs : int
+        The number of epochs the model is being trained for
+    lossFunc : nn.CrossEntropyLoss
+        The function we use to calcualte loss. In this case, it is cross entropy
+    optimizer : torch.optim.SGD
+        The function we use to optimize the model. In this case, it is stochastic gradient descent
+    trainloader : Data loader
+        The loaded set of training images
+    validloader : Data loader
+        The loaded set of validation images
+    saver : datasaver
+        Saves the accuracy and loss at each epoch into a text file
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+    modelType : string
+        Describes what type the model is. Used in the data saver.
+
+    Returns
+    -------
+    None.
+
+    """
     bestAcc = 0.0 
     bestValidLoss = 999.99
     for epoch in range(numEpochs):
@@ -145,6 +178,25 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
 
 
 def printSetStats(device, trainloader):
+    """
+    Function
+    ----------
+    Prints the stats of the training as it begins.
+    Displays what device the training will be run on as well as the size of the batches
+
+    Parameters
+    ----------
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+    trainloader : Data loader
+        The loaded set of training images
+
+    Returns
+    -------
+    None.
+
+    """
     print("The model will be running on", device, "device\n") 
 
     for images, labels in trainloader:
@@ -153,6 +205,21 @@ def printSetStats(device, trainloader):
        break
 
 def displayTrainSet(trainloader):
+    """
+    Function
+    ----------
+    Displays the set of data that is being trained. Mainly used to verify it was loaded correctly
+
+    Parameters
+    ----------
+    trainloader : Data loader
+        The loaded set of training images
+
+    Returns
+    -------
+    None.
+
+    """
     dataiter = iter(trainloader)
     images, labels = next(dataiter)
     img = torchvision.utils.make_grid(images)
@@ -163,14 +230,18 @@ def displayTrainSet(trainloader):
 
 def selectModelType(modelType):
     """
+    Function
+    ----------
+    Decides what model is being used. There are three options:
+        Basic
+        Linear
+        CNN
+    If none of the options are entered, it chooses Basic as the default
+    
     Parameters
     ----------
     modelType : String
-        Decides what model is being used. There are three options:
-            Basic
-            Linear
-            CNN
-        If none of the options are entered, it chooses Basic as the default
+        
 
     Returns
     -------
