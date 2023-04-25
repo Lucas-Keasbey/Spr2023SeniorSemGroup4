@@ -32,13 +32,14 @@ def main():
 
     modelType, modelTest, transform = selectModelType()
     modelTest = modelTest.to(device)
-    testset = torchvision.datasets.FashionMNIST(root='./data', train=False, download=False, transform=transform)
+    testset = torchvision.datasets.FashionMNIST(root='../data', train=False, download=False, transform=transform)
     test_set_size = int(len(testset) * 0.3) #give the test set 30% of the entire data set
     testloader = data.DataLoader(testset, batch_size=1, shuffle=True)
    
     #load model
-    path = './PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
-    modelTest.load_state_dict(torch.load(path))
+    path = '../PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)
+    
+    modelTest.load_state_dict(torch.load(path, map_location=device))
     print("\nTesting %s model\n"%(modelType))
 
 

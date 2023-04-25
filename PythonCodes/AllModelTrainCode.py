@@ -19,17 +19,26 @@ from Models.ModelClassFiles import LinearModel
 from Models.ModelClassFiles import CNN
 import time
 import DataSaver
+import argparse
 
 
 def main():
-
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", help = "decides what model to train. Options are Basic, Linear, or CNN", type=str)
+    parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 30", type=int)
+    parser.add_argument("--lr", help = "decides the learning rate for the model. Default is 0.01", type=float)
+    args = parser.parse_args()
     #Edit these for training for now
     BATCH_SIZE = 64
-    learningRate = 0.01
-    numEpochs = 25
+    
+    
+    learningRate = args.lr if args.lr else 0.01
+    numEpochs = args.num_epochs if args.num_epochs else 25
 
     ##picking model
-    modelType, model, transform = selectModelType()
+    modelType = args.model if args.model else "Basic"
+    model, transform = selectModelType(modelType)
   
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
     
@@ -79,6 +88,39 @@ def main():
     
 
 def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType):
+    """
+    
+
+    Parameters
+    ----------
+    model : nn.module
+        The model being trained. Either:
+            Basic
+            Linear
+            CNN
+    numEpochs : int
+        The number of epochs the model is being trained for
+    lossFunc : nn.CrossEntropyLoss
+        The function we use to calcualte loss. In this case, it is cross entropy
+    optimizer : torch.optim.SGD
+        The function we use to optimize the model. In this case, it is stochastic gradient descent
+    trainloader : Data loader
+        The loaded set of training images
+    validloader : Data loader
+        The loaded set of validation images
+    saver : datasaver
+        Saves the accuracy and loss at each epoch into a text file
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+    modelType : string
+        Describes what type the model is. Used in the data saver.
+
+    Returns
+    -------
+    None.
+
+    """
     bestAcc = 0.0 
     bestValidLoss = 999.99
     for epoch in range(numEpochs):
@@ -136,6 +178,25 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
 
 
 def printSetStats(device, trainloader):
+    """
+    Function
+    ----------
+    Prints the stats of the training as it begins.
+    Displays what device the training will be run on as well as the size of the batches
+
+    Parameters
+    ----------
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+    trainloader : Data loader
+        The loaded set of training images
+
+    Returns
+    -------
+    None.
+
+    """
     print("The model will be running on", device, "device\n") 
 
     for images, labels in trainloader:
@@ -144,6 +205,21 @@ def printSetStats(device, trainloader):
        break
 
 def displayTrainSet(trainloader):
+    """
+    Function
+    ----------
+    Displays the set of data that is being trained. Mainly used to verify it was loaded correctly
+
+    Parameters
+    ----------
+    trainloader : Data loader
+        The loaded set of training images
+
+    Returns
+    -------
+    None.
+
+    """
     dataiter = iter(trainloader)
     images, labels = next(dataiter)
     img = torchvision.utils.make_grid(images)
@@ -152,25 +228,42 @@ def displayTrainSet(trainloader):
     npimg = img.numpy()
     #plt.imshow(np.transpose(npimg, (1, 2, 0)))
 
-def selectModelType():
-    modelType = ""
-    while(True):
-        modelType = input("What Model would you like to use? (Basic, Linear, CNN): ")
-        if(modelType.__eq__("Basic")):
-            model = BasicModel.BasicModel()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
-            break
-        elif(modelType.__eq__("Linear")):
-            model = LinearModel.Net()
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
-            break
-        elif(modelType.__eq__("CNN")):
-            model = CNN.ConvModel();
-            transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
-            break
-        else:
-            print("Awnser not valid, please try again")
+def selectModelType(modelType):
+    """
+    Function
+    ----------
+    Decides what model is being used. There are three options:
+        Basic
+        Linear
+        CNN
+    If none of the options are entered, it chooses Basic as the default
+    
+    Parameters
+    ----------
+    modelType : String
+        
 
-    return modelType, model, transform
+    Returns
+    -------
+    model : nn.Module
+        The actual model that will be trained
+    transform : transform
+        The transform
+    """
+    if(modelType.__eq__("Basic")):
+        model = BasicModel.BasicModel()
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+    elif(modelType.__eq__("Linear")):
+        model = LinearModel.Net()
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(1,1,1))]) #maniputlating the set to feed into the model for training
+    elif(modelType.__eq__("CNN")):
+        model = CNN.ConvModel();
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+    else:
+        print("Answer not valid, using Basic as the default")
+        model = BasicModel.BasicModel()
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Lambda(lambda x: x.repeat(3,1,1))]) #maniputlating the set to feed into the model for training
+
+    return model, transform
 
 main()
