@@ -29,7 +29,6 @@ def main():
     parser.add_argument("--num_epochs", help = "decides the number of epochs. Default value is 30", type=int)
     parser.add_argument("--lr", help = "decides the learning rate for the model. Default is 0.01", type=float)
     args = parser.parse_args()
-    #Edit these for training for now
     BATCH_SIZE = 64
     
     
@@ -39,25 +38,10 @@ def main():
     ##picking model
     modelType = args.model if args.model else "Basic"
     model, transform = selectModelType(modelType)
-  
     print("Running %s Model with %d epochs, %d batch size, and %.4f learning rate\n"%(modelType, numEpochs, BATCH_SIZE, learningRate))
-    
-    #For running on Visual Studio
-    #trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
-    
-    #For running on Spyder
-    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set
-
-    # use 30% of training data for validation, 70% for training
-    trainSetSize = int(len(trainset) * 0.7)
-    validSetSize = int(len(trainset) * 0.3)
-
-    # giving the validloader a random 30% of the trainingset, 70% to the trainloader
-    seed = torch.Generator().manual_seed(42) #for randomness
-    trainset, validset = data.random_split(trainset,[trainSetSize,validSetSize],generator=seed)
-    validloader = data.DataLoader(validset, batch_size=1, shuffle=True)
-    trainloader = data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
-    
+   
+    trainloader,validloader = initializeData(BATCH_SIZE,transform)
+   
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     printSetStats(device,trainloader)
     model = model.to(device)
@@ -70,20 +54,48 @@ def main():
 
     
     saver = DataSaver.dataSaver(numEpochs, learningRate, BATCH_SIZE, modelType)
-    #saver.initialize()
+    saver.initialize()
     
     print("\nBegining Training and Validation...\n")
     startTime = time.time()
     trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType)
     finishTime = time.time();
     print('\nTime elaspsed (seconds): %.2f'%(finishTime - startTime))
-    ##print("To test model, run the tesing code and with the respective model trained. You need to do this in order to save it")
+    saveModel(model,modelType)
 
-    strAwns = input("Would you like to save the trained model (Y/N)?\n")
+def saveModel(model,modelType):
+    strAwns = input("Would you like to save the trained model (Y/N)? (Previously trained model of the same type will be overwritten!!!)\n")
     PATH = ("./PythonCodes/Models/TrainedModels/%sModel.pth"%(modelType))
-    if(strAwns == "Y"):
-        torch.save(model, PATH)
+    while(True):
+        if(strAwns == "Y"):
+            print("Saving model...")
+            torch.save(model, PATH)
+            print("Model saved!")
+            break
+        elif(strAwns == "N"):
+            print("Model not saved")
+            break
+        else:
+            print("Invalid awnser, try again")
+ 
 
+def initilizeData(BATCH_SIZE,transform):
+    #For running on Visual Studio
+    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    
+    #For running on Spyder
+    #trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set
+
+    # use 30% of training data for validation, 70% for training
+    trainSetSize = int(len(trainset) * 0.7)
+    validSetSize = int(len(trainset) * 0.3)
+
+    # giving the validloader a random 30% of the trainingset, 70% to the trainloader
+    seed = torch.Generator().manual_seed(42) #for randomness
+    trainset, validset = data.random_split(trainset,[trainSetSize,validSetSize],generator=seed)
+    validloader = data.DataLoader(validset, batch_size=1, shuffle=True)
+    trainloader = data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
+    return trainloader, validloader
 
     
 
@@ -174,7 +186,7 @@ def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validlo
             bestValidLoss = validLoss
 
         print('Epoch:%d | TrainingLoss:%.4f  | ValidationLoss:%.4f | Accuracy:%.2f'%(epoch, trainLoss / len(trainloader), validLoss / len(validloader), accuracy)) 
-        #saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
+        saver.saveRunData(epoch,(trainLoss  / len(trainloader)), (validLoss / len(validloader)), (accuracy))
 
 
 def printSetStats(device, trainloader):
