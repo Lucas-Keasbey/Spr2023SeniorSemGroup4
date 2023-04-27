@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         return out;
     }
 
+
     public String assetFilePath(String assetName) throws IOException {
         File file = new File(this.getFilesDir(), assetName);
         if (file.exists() && file.length() > 0) {

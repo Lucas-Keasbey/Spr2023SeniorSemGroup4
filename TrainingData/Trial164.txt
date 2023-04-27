@@ -1,0 +1,3 @@
+Trial:164	Epochs:2	LearningRate:0.010	BatchSize:64	Model:Basic
+Epoch:0	TrainingLoss:1.017	ValidLoss:0.552	Accuracy:79.461
+Epoch:1	TrainingLoss:0.492	ValidLoss:0.483	Accuracy:82.439
