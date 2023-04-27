@@ -19,7 +19,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import org.pytorch.*;
+import org.pytorch.IValue;
+import org.pytorch.Module;
+import org.pytorch.Tensor;
+import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
         modelGroup = findViewById(R.id.ModelGroup);
 
         try {
-            modelBasic = LiteModuleLoader.load(assetFilePath("BasicModel.pt"));
-            modelLinear = LiteModuleLoader.load(assetFilePath("LinearModel.pt"));
-            modelCNN = LiteModuleLoader.load(assetFilePath("CNNModel.pt"));
+            modelBasic = Module.load(assetFilePath("BasicModelApp.pt"));
+            modelLinear = Module.load(assetFilePath("LinearModelApp.pt"));
+            modelCNN = Module.load(assetFilePath("CNNModelApp.pt"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     active = modelCNN;
 
                 //sets the click event for classify image button
-                text.setText(labels[predictLabel(active)]);
+                text.setText(predictLabel(active));
             }
 
         });
@@ -128,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //following method is to be implemented
-    protected int predictLabel(Module active){
+    protected String predictLabel(Module active){
         try{
             // run image through model and process prediction to get label index
             Tensor inputTensor = generateTensor();
@@ -140,10 +142,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //return fail message if it doesn't work
-        return 10;
+        return labels[10];
     }
 
-    public int highestIndex(float[] arr){
+    public String highestIndex(float[] arr){
         int highest = -1;
         float val = 0;
         for (int i=0;i<arr.length;i++){
@@ -152,20 +154,23 @@ public class MainActivity extends AppCompatActivity {
                 val = arr[i];
             }
         }
-        return highest;
+        return String.format("%s, %.2f", labels[highest], val);
     }
 
     public Tensor generateTensor(){
         Tensor out = null;
         try{
             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 28, 28, false);
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(scaled.getByteCount());
+/*            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(scaled.getByteCount());
             scaled.copyPixelsToBuffer(byteBuffer);
             byteBuffer.rewind();
-            long[] shape = {3, 28, 28}; // adjust shape and channels as needed
+            long[] shape = {3, 1, 1}; // adjust shape and channels as needed
             float[] data = new float[byteBuffer.limit() / 4]; // Assuming 4 bytes per float
             byteBuffer.asFloatBuffer().get(data);
             out = Tensor.fromBlob(data, shape);
+*/          float[] meanRGB = {0,0,0};
+            float[] stdRGB = {1,1,1};
+            out = TensorImageUtils.bitmapToFloat32Tensor(scaled, meanRGB, stdRGB);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -173,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         return out;
     }
 
-    //following method is pulled from standard Android Studio tools to get file path
+
     public String assetFilePath(String assetName) throws IOException {
         File file = new File(this.getFilesDir(), assetName);
         if (file.exists() && file.length() > 0) {
