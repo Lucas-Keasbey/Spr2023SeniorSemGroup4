@@ -24,13 +24,21 @@ from Models.ModelClassFiles import CNN
 import time
 import DataSaver
 from sklearn import metrics
+import argparse
 
 def main():
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", help = "decides what model to train. Options are Basic, Linear, or CNN", type=str)
+    args = parser.parse_args()
+    
+    modelType = modelType = args.model if args.model else "Basic"
+    
     print("Beginning Testing...\n")
     #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     device= torch.device("cpu") #dont really need gpu for testing
 
-    modelType, modelTest, transform = selectModelType()
+    modelTest, transform = selectModelType(modelType)
     modelTest = modelTest.to(device)
     testset = torchvision.datasets.FashionMNIST(root='../data', train=False, download=False, transform=transform)
     test_set_size = int(len(testset) * 0.3) #give the test set 30% of the entire data set
@@ -48,7 +56,24 @@ def main():
 
 
 
-def selectModelType():
+def selectModelType(modelType):
+    """
+    Function
+    ----------
+    Selects the model that is being tested.
+
+    Parameters
+    ----------
+    modelType : String
+        The model type being tested. Supplied by the command line argument
+
+    Returns
+    -------
+    model : nn.module
+        The model being tested. Either Basic, Linear or CNN
+    transform : transform
+
+    """
     modelType = ""
     while(True):
         modelType = input("What Model would you like to Test? (Basic, Linear, CNN): ")
@@ -67,9 +92,29 @@ def selectModelType():
         else:
             print("Awnser not valid, please try again")
 
-    return modelType, model, transform
+    return model, transform
 
 def testAcc(testloader, modelTest, device):
+    """
+    Function
+    ----------
+    Gives the model the test batch and sees how it does.
+
+    Parameters
+    ----------
+    testloader : data loader
+        the object with all the images for testing
+    modelTest : nn.module
+        The model being tested
+    device : torch.device
+        The drive that the training will be run on.
+        Either a CPU or GPU
+
+    Returns
+    -------
+    None.
+
+    """
     
     modelTest.eval()
     totalTestAcc = 0.0
@@ -131,6 +176,21 @@ def testAcc(testloader, modelTest, device):
      
 
 def testClassAcc(cm):
+    """
+    Function
+    ----------
+    Identifies stats from the training such as confusion matrices, and precision
+
+    Parameters
+    ----------
+    cm : confusion matrix
+        The entire list of guesses and answers to create the plot.
+
+    Returns
+    -------
+    None.
+
+    """
     per_class_accuracies = {}
     classes = [0,1,2,3,4,5,6,7,8,9]
     # Calculate the accuracy for each one of our classes

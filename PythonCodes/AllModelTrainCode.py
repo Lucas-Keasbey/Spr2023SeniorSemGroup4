@@ -80,6 +80,24 @@ def saveModel(model,modelType):
  
 
 def initilizeData(BATCH_SIZE,transform):
+    """
+    Function
+    ----------
+    Prepares the data. Loads the training set of data into the data loaders that are used in training.
+
+    Parameters
+    ----------
+    BATCH_SIZE : int
+        Gives the size of each abtch for training
+    transform : Transform
+
+    Returns
+    -------
+    trainloader : data loader
+    validloader : data loader
+        The object that gives each image being used for training and validation
+
+    """
     #For running on Visual Studio
     trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
     
@@ -101,7 +119,9 @@ def initilizeData(BATCH_SIZE,transform):
 
 def trainAndValidate(model, numEpochs, lossFunc, optimizer, trainloader, validloader, saver, device, modelType):
     """
-    
+    Function
+    ----------
+    Trains the model. Displays and records the accuracy and training loss at each epoch. Also records the validation loss.
 
     Parameters
     ----------

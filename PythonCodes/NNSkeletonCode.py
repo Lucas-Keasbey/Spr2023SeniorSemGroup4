@@ -15,7 +15,7 @@ def main():
     gpu_available = torch.cuda.is_available()
     print(f"Gpu Available? {gpu_available}")
     print("Using torch",torch.__version__)
-    BATCH_SIZE = 1
+    BATCH_SIZE = 64
     ## transformations
     transform = transforms.Compose([transforms.ToTensor()])
     
@@ -23,7 +23,7 @@ def main():
     ## download and load training dataset
     # This is the dataset that will be using 'root = where the dataset is', 
     #train if the data is pretrained, download if it is downloaded
-    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform)
+    trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform)
     
     #DataLoader(What is the dataset, what is the batch size, 
     #if you would like to shuffle the data(optional), num of cpu cores(optional))

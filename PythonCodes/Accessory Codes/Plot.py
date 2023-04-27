@@ -3,7 +3,7 @@ from DataPlotter import DataPlotter
 
 filePrefix = "../../TrainingData/"
 
-numTrials = 3
+numTrials = 1
 
 files = [""] * numTrials
 
@@ -36,8 +36,11 @@ files = [""] * numTrials
 
 # Data from basic, linear, and cnn models: LR: 0.01, Epochs: 25
 files[0] = filePrefix + "Trial140.txt"
-files[1] = filePrefix + "Trial150.txt"
-files[2] = filePrefix + "Trial162.txt"
+# files[1] = filePrefix + "Trial150.txt"
+# files[2] = filePrefix + "Trial162.txt"
+
+# Data from a specific trial of 150 epochs
+# files[0] = filePrefix + "Trial165.txt"
     
 
 print("Loading Plotter")
@@ -45,8 +48,6 @@ print("Loading Plotter")
 Plot = DataPlotter(files)
 
 Plot.plotLoss(140)
-Plot.plotLoss(150)
-Plot.plotLoss(162)
 
-# Plot.plotAcc()
+Plot.plotAcc()
 
