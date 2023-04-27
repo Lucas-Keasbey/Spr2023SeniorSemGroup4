@@ -36,3 +36,21 @@ The rest of the time will be spent finishing the documentation, cleaning up the 
 
 Reflection:
 	This qualifies as a capstone project because we are simulating what it's like to be a software engineer and we are bringing together and applying all the knowledge we have learned over our college career. This is because we are using many of the same techniques and tools that one would use in a real life job setting. For example, working as a team to develop an application, using GitHub, etc. This project will hone in our skills as a software developer as we will be making an application with some actual significance and with real life applications. As we are in a school setting, there is a safety net in the form of our professor and colleagues. If we are truly stuck, there are many people we can go to for help which is a valuable skill to have in and of itself.
+	
+	
+How to run the code:
+	1. Simply download this repo and put the folder where ever you want it.
+	2. Python Code:
+		2a. Pick you favorite python IDE of choice and use the repo itself as the root folder for the project
+		(WARNING: Spyder and Visual Studio use different methods of using files strings 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
