@@ -41,8 +41,16 @@ Reflection:
 How to run the code:
 	1. Simply download this repo and put the folder where ever you want it.
 	2. Python Code:
-		2a. Pick you favorite python IDE of choice and use the repo itself as the root folder for the project
-		(WARNING: Spyder and Visual Studio use different methods of using files strings 
+		2a. Pick you favorite python IDE of choice (However Visiual studio is prefered) and use the repo itself as the root folder for the project
+		(WARNING: Spyder and Visual Studio use different methods of using files strings so the code may not run due to a few dots before the file its trying to 		access)
+		2b. To train the a model, run AllModelTrainCode with args model type (Basic,Linear,CNN), num_epochs, and learning rate.
+		2c. To test a model, run AllModelTestCode, and speficy what model you want to test after running the program
+		2d. To use your trained model in the app, first run the ModelAppConverter code and speficy what model you want to convert. Once complete, move the model 			into the assets folder in android studio.
+		2e. DO NOT RUN NNSkeletonCode or BasicModelTraining!!!, these are depreicated and kept around for reference
+	3. Android stuido app:
+		3a. Run android studo and choose the root project folder as Application, this is very important as it will not work otherwise.
+		3b. Run the app and choose any image you would like and select what model you waant to use, press classify and obsever the prediction
+		
 	
 	
 	

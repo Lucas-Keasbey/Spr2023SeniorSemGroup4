@@ -1,6 +1,8 @@
 {
   "ExpandedNodes": [
     "",
+    "\\data",
+    "\\data\\FashionMNIST",
     "\\PythonCodes",
     "\\PythonCodes\\Models",
     "\\PythonCodes\\Models\\ModelClassFiles",

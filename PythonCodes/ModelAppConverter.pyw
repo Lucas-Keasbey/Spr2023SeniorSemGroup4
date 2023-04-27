@@ -18,7 +18,7 @@ import DataSaver
 
 def main():
     modelType, model, transform = selectModelType()
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     model = model.to(device)
     
    
@@ -36,7 +36,7 @@ def main():
    
     path = ('./PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType))
     #C:\Users\starm\Source\Repos\Spr2023SeniorSemGroup4\PythonCodes\Models\ModelsForTesting\BasicModelTest.pth
-    model.load_state_dict(torch.load('./PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType)))
+    model.load_state_dict(torch.load('./PythonCodes/Models/ModelsForTesting/%sModelTest.pth'%(modelType),device))
     #print("\nTesting %s model\n"%(modelType))
     model.eval();
 
