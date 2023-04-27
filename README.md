@@ -36,3 +36,29 @@ The rest of the time will be spent finishing the documentation, cleaning up the 
 
 Reflection:
 	This qualifies as a capstone project because we are simulating what it's like to be a software engineer and we are bringing together and applying all the knowledge we have learned over our college career. This is because we are using many of the same techniques and tools that one would use in a real life job setting. For example, working as a team to develop an application, using GitHub, etc. This project will hone in our skills as a software developer as we will be making an application with some actual significance and with real life applications. As we are in a school setting, there is a safety net in the form of our professor and colleagues. If we are truly stuck, there are many people we can go to for help which is a valuable skill to have in and of itself.
+	
+	
+How to run the code:
+	1. Simply download this repo and put the folder where ever you want it.
+	2. Python Code:
+		2a. Pick you favorite python IDE of choice (However Visiual studio is prefered) and use the repo itself as the root folder for the project
+		(WARNING: Spyder and Visual Studio use different methods of using files strings so the code may not run due to a few dots before the file its trying to 		access)
+		2b. To train the a model, run AllModelTrainCode with args model type (Basic,Linear,CNN), num_epochs, and learning rate.
+		2c. To test a model, run AllModelTestCode, and speficy what model you want to test after running the program
+		2d. To use your trained model in the app, first run the ModelAppConverter code and speficy what model you want to convert. Once complete, move the model 			into the assets folder in android studio.
+		2e. DO NOT RUN NNSkeletonCode or BasicModelTraining!!!, these are depreicated and kept around for reference
+	3. Android stuido app:
+		3a. Run android studo and choose the root project folder as Application, this is very important as it will not work otherwise.
+		3b. Run the app and choose any image you would like and select what model you waant to use, press classify and obsever the prediction
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
