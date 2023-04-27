@@ -41,8 +41,8 @@ Reflection:
 How to run the code:
 	1. Simply download this repo and put the folder where ever you want it.
 	2. Python Code:
-		2a. Pick you favorite python IDE of choice and use the repo itself as the root folder for the project
-		(WARNING: Spyder and Visual Studio use different methods of using files strings 
+		2a. Pick you favorite python IDE of choice (However Visiual studio is prefered) and use the repo itself as the root folder for the project
+		(WARNING: Spyder and Visual Studio use different methods of using files strings so the code may not run due to 
 	
 	
 	
