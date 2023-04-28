@@ -18,7 +18,7 @@ from Models.ModelClassFiles import BasicModel
 from Models.ModelClassFiles import LinearModel
 from Models.ModelClassFiles import CNN
 import time
-import DataSaver
+from ModelStatistics import DataSaver
 import argparse
 
 
@@ -64,12 +64,16 @@ def main():
     saveModel(model,modelType)
 
 def saveModel(model,modelType):
-    PATH = ("./PythonCodes/Models/TrainedModels/%sModel.pth"%(modelType))
+    PATH = ("./Models/TrainedModels/%sModel.pth"%(modelType))
     while(True):
         strAwns = input("Would you like to save the trained model (Y/N)? (Previously trained model of the same type will be overwritten!!!)\n")
         if(strAwns == "Y"):
             print("Saving model...")
-            torch.save(model, PATH)
+            try:
+                torch.save(model, PATH)
+            except:
+                PATH = ("../Models/TrainedModels/%sModel.pth"%(modelType))
+                torch.save(model, PATH)
             print("Model saved!")
             break
         elif(strAwns == "N"):
@@ -99,7 +103,10 @@ def initilizeData(BATCH_SIZE,transform):
 
     """
     #For running on Visual Studio
-    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=False, transform=transform) #our training set
+    try:
+        trainset = torchvision.datasets.FashionMNIST(root='./', train=True, download=False, transform=transform) #our training set
+    except:
+        trainset = torchvision.datasets.FashionMNIST(root='../', train=True, download=False, transform=transform)
     
     #For running on Spyder
     #trainset = torchvision.datasets.FashionMNIST(root='../data', train=True, download=False, transform=transform) #our training set

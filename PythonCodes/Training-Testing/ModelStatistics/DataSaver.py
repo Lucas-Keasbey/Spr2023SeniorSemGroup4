@@ -7,23 +7,25 @@ class dataSaver:
         self.learnRate = learnRate
         self.batchSize = batchSize
         self.modelType = modelType
+        self.trialFile = None
 
     def initialize(self):
         ##get trialnum
-        trialFile = open('./TrainingData/trialNum.txt', 'r')
+        self.trialFile = open('TrainingData/trialNum.txt', 'r')
+        trialFile = self.trialFile()
         trialNumString = trialFile.read(3)
         trialNum = int(trialNumString)
         trialFile.close()
 
         ##update for trial num for next trial
         newtrailNum = (trialNum + 1)
-        trialFile = open('./TrainingData/trialNum.txt', 'w')
+        trialFile = open('TrainingData/trialNum.txt', 'w')
         strNewTrialNum = ("%d"%(newtrailNum))
         trialFile.write(strNewTrialNum) 
         trialFile.close()
 
         ##First line of trial
-        self.writeFileName = ('./TrainingData/Trial%d.txt'%(trialNum))
+        self.writeFileName = ('TrainingData/Trial%d.txt'%(trialNum))
         writeFile = open(self.writeFileName,'w')
         strinit = "Trial:%d\tEpochs:%d\tLearningRate:%.3f\tBatchSize:%d\tModel:%s\n"%(trialNum, self.numEpochs, self.learnRate, self.batchSize, self.modelType)
         writeFile.write(strinit)
